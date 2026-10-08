@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Жинағыш базалары мен экспорттар (collector/)
+*.db
+*.sqlite
+*.sqlite3
+collector/data/
+collector/output/
+
+# Нақты hh деректері (tools/fetch-hh.js) — үлкен және жиі өзгереді
+data/real-vacancies.json
+data/dataset-real.js
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Редактор / ОЖ
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Жергілікті баптаулар
+.claude/
+CLAUDE.md
