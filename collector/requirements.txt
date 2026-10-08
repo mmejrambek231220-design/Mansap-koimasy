@@ -1,0 +1,4 @@
+# Мансап Компасы — деректер жинау қабаты (Python 3.10+)
+# Қалғаны — стандартты кітапхана (sqlite3, csv, json, argparse, re)
+requests>=2.31
+beautifulsoup4>=4.12

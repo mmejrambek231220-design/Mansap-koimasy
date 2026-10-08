@@ -1,0 +1,107 @@
+{
+  "_comment": "Офлайн тексеруге арналған қолдан жазылған үлгі: hh API /vacancies (іздеу) және /vacancies/{id} (толық) жауаптарының құрылымы. Компаниялар, ID-лер мен сілтемелер ойдан шығарылған.",
+  "queries": {
+    "Python разработчик": {
+      "found": 3, "pages": 1, "page": 0, "per_page": 100,
+      "items": [
+        {
+          "id": "910000001", "name": "Python разработчик (Django)",
+          "area": { "id": "160", "name": "Алматы", "url": "https://api.hh.ru/areas/160" },
+          "salary": { "from": 800000, "to": 1200000, "currency": "KZT", "gross": false },
+          "published_at": "2026-09-28T10:15:00+0500",
+          "employer": { "id": "1001", "name": "Үлгі Софт" },
+          "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+          "snippet": { "requirement": "Опыт коммерческой разработки на <highlighttext>Python</highlighttext>, PostgreSQL, Docker.", "responsibility": "Разработка REST API на Django." },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/910000001"
+        },
+        {
+          "id": "910000002", "name": "Senior Python Developer / ML",
+          "area": { "id": "159", "name": "Астана", "url": "https://api.hh.ru/areas/159" },
+          "salary": { "from": 3000, "to": null, "currency": "USD", "gross": true },
+          "published_at": "2026-10-02T09:00:00+0500",
+          "employer": { "id": "1002", "name": "Мысал Дата" },
+          "experience": { "id": "moreThan6", "name": "Более 6 лет" },
+          "snippet": { "requirement": "Machine learning, PyTorch, Kubernetes, AWS.", "responsibility": "Внедрение LLM-решений в продукт." },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/910000002"
+        },
+        {
+          "id": "910000003", "name": "Python-разработчик (стажёр)",
+          "area": { "id": "211", "name": "Костанай", "url": "https://api.hh.ru/areas/211" },
+          "salary": null,
+          "published_at": "2026-09-30T12:00:00+0500",
+          "employer": { "id": "1003", "name": "Өңір IT" },
+          "experience": { "id": "noExperience", "name": "Нет опыта" },
+          "snippet": { "requirement": "Базовые знания Python и SQL.", "responsibility": "Автоматизация отчётов в Excel." },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/910000003"
+        }
+      ]
+    },
+    "Бухгалтер": {
+      "found": 2, "pages": 1, "page": 0, "per_page": 100,
+      "items": [
+        {
+          "id": "910000004", "name": "Бухгалтер по первичной документации",
+          "area": { "id": "205", "name": "Шымкент", "url": "https://api.hh.ru/areas/205" },
+          "salary": { "from": 300000, "to": 400000, "currency": "KZT", "gross": false },
+          "published_at": "2026-10-01T08:30:00+0500",
+          "employer": { "id": "1004", "name": "Мысал Сауда" },
+          "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+          "snippet": { "requirement": "Знание 1С:Бухгалтерия, MS Excel.", "responsibility": "Ведение первичной документации." },
+          "professional_roles": [ { "id": "18", "name": "Бухгалтер" } ],
+          "alternate_url": "https://hh.kz/vacancy/910000004"
+        },
+        {
+          "id": "910000005", "name": "Главный бухгалтер (МСФО)",
+          "area": { "id": "172", "name": "Усть-Каменогорск", "url": "https://api.hh.ru/areas/172" },
+          "salary": { "from": null, "to": 900000, "currency": "KZT", "gross": true },
+          "published_at": "2026-09-25T14:45:00+0500",
+          "employer": { "id": "1005", "name": "Шығыс Энерго Үлгі" },
+          "experience": { "id": "between3And6", "name": "От 3 до 6 лет" },
+          "snippet": { "requirement": "Опыт работы главным бухгалтером от 3 лет, знание МСФО.", "responsibility": "Налоговая отчётность, бюджетирование." },
+          "professional_roles": [ { "id": "18", "name": "Бухгалтер" } ],
+          "alternate_url": "https://hh.kz/vacancy/910000005"
+        }
+      ]
+    }
+  },
+  "details": {
+    "910000001": {
+      "id": "910000001", "name": "Python разработчик (Django)",
+      "description": "<p><strong>Требования:</strong></p><ul><li>Опыт коммерческой разработки на Python от 2 лет</li><li>Django, Django REST Framework</li><li>PostgreSQL, Redis</li><li>Docker, CI/CD</li><li>Английский язык — Intermediate</li></ul><p><strong>Мы ценим:</strong> умение работать в команде, Scrum.</p>",
+      "key_skills": [ { "name": "Python" }, { "name": "Django" }, { "name": "PostgreSQL" }, { "name": "Docker" }, { "name": "Git" } ],
+      "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+      "alternate_url": "https://hh.kz/vacancy/910000001"
+    },
+    "910000002": {
+      "id": "910000002", "name": "Senior Python Developer / ML",
+      "description": "<p>Ищем инженера машинного обучения.</p><ul><li>Python, PyTorch, scikit-learn</li><li>Опыт с LLM и генеративным ИИ (ChatGPT API, промпт-инжиниринг)</li><li>Kubernetes, AWS</li><li>Аналитическое мышление</li><li>English — Upper-Intermediate</li></ul>",
+      "key_skills": [ { "name": "Machine Learning" }, { "name": "PyTorch" }, { "name": "Kubernetes" }, { "name": "AWS" }, { "name": "LLM" } ],
+      "experience": { "id": "moreThan6", "name": "Более 6 лет" },
+      "alternate_url": "https://hh.kz/vacancy/910000002"
+    },
+    "910000003": {
+      "id": "910000003", "name": "Python-разработчик (стажёр)",
+      "description": "<p>Стажировка для начинающих.</p><ul><li>Базовые знания Python и SQL</li><li>Уверенный пользователь MS Excel (сводные таблицы, ВПР)</li><li>Коммуникабельность</li></ul>",
+      "key_skills": [ { "name": "Python" }, { "name": "SQL" }, { "name": "MS Excel" } ],
+      "experience": { "id": "noExperience", "name": "Нет опыта" },
+      "alternate_url": "https://hh.kz/vacancy/910000003"
+    },
+    "910000004": {
+      "id": "910000004", "name": "Бухгалтер по первичной документации",
+      "description": "<p>Обязанности:</p><ul><li>Ведение первичной документации</li><li>Работа в 1С:Бухгалтерия 8.3</li><li>Документооборот с контрагентами</li></ul><p>Требования: знание MS Excel, внимательность.</p>",
+      "key_skills": [ { "name": "1С: Бухгалтерия" }, { "name": "Первичная документация" }, { "name": "MS Excel" } ],
+      "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+      "alternate_url": "https://hh.kz/vacancy/910000004"
+    },
+    "910000005": {
+      "id": "910000005", "name": "Главный бухгалтер (МСФО)",
+      "description": "<p>Требования:</p><ul><li>Бухгалтерский учёт и налоговая отчётность по законодательству РК</li><li>Знание МСФО (IFRS), сертификат ДипИФР приветствуется</li><li>Бюджетирование, финансовый анализ</li><li>Power BI — будет плюсом</li></ul>",
+      "key_skills": [ { "name": "Бухгалтерский учет" }, { "name": "МСФО" }, { "name": "Налоговая отчетность" }, { "name": "Финансовый анализ" } ],
+      "experience": { "id": "between3And6", "name": "От 3 до 6 лет" },
+      "alternate_url": "https://hh.kz/vacancy/910000005"
+    }
+  }
+}
