@@ -2,11 +2,14 @@
   "name": "mansap-kompasy-server",
   "version": "1.0.0",
   "private": true,
-  "description": "Мансап Компасы — авторизация сервері (Express + SQL Server)",
+  "description": "Мансап Компасы — авторизация және сауалнамалар сервері (Express + SQL Server)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "db:init": "node init-db.js"
+    "db:init": "node init-db.js",
+    "db:seed": "node seed-demo.js",
+    "export:surveys": "node export-surveys.js",
+    "generate:surveys": "node ../tools/generate-surveys.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
