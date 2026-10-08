@@ -78,7 +78,7 @@
         <button class="menu__link" aria-haspopup="true">Ресурстар <span class="chev">⌄</span></button>
         <ul class="dropdown">
           <li><a href="index.html#research">Зерттеулер</a></li>
-          <li><a href="#">Әдістеме</a></li>
+          <li><a href="model.html">Әдістеме</a></li>
           <li><a href="#">Блог</a></li>
         </ul>
       </li>
@@ -160,6 +160,24 @@
     <aside class="skill-card" id="sdModel" aria-live="polite"></aside>
   </section>
 
+  <!-- SURVEY (data/surveys.js) -->
+  <section class="container sd-sec" id="sdSurvey" hidden>
+    <div class="panel-box">
+      <div class="panel-box__head">
+        <p class="eyebrow sd-eyebrow">Жұмыс берушілер сауалнамасы</p>
+        <h2>Жұмыс берушілер бұл дағдыға сұранысты қалай бағалайды?</h2>
+        <p>Жұмыс берушілер келесі 3–4 жылда осы дағдыға сұраныс өсе ме, жоқ па деп жауап берді. Дауыстар сальдосы модель болжамымен біріктіріледі (ансамбль): жауап көп болған сайын сауалнама салмағы w артады, бірақ 0,5-тен аспайды. Мамандық таңдалса — сол саланың, өңір таңдалса — сол өңірдің жауаптары қолданылады. <span id="svDemo"></span></p>
+      </div>
+      <div class="sv-grid">
+        <div class="sv-main" id="svMain"></div>
+        <div class="sv-sectors">
+          <p class="sv-cap">Салалар бойынша <small>(сальдо = өседі − азаяды, %)</small></p>
+          <ul id="svSectors"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- BY PROFESSION -->
   <section class="container sd-sec">
     <div class="panel-box">
@@ -238,7 +256,7 @@
         <div><h5>Деректер</h5><a href="vacancies.html">Вакансиялар</a><a href="skills.html">Дағдылар</a><a href="professions.html">Мамандықтар</a><a href="#">Жалақы</a><a href="#">Өңірлер</a></div>
         <div><h5>Болжамдар</h5><a href="forecast.html">Дағдылар болжамы</a><a href="#">Олқылық талдауы</a><a href="#">Мансап кеңесшісі</a></div>
         <div><h5>Кімге</h5><a href="index.html#students">Студенттер</a><a href="index.html#employers">Жұмыс берушілер</a><a href="index.html#universities">Оқу орындары</a></div>
-        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="#">Әдістеме</a><a href="#">Байланыс</a></div>
+        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="model.html">Әдістеме</a><a href="#">Байланыс</a></div>
       </div>
     </div>
     <div class="footer__bottom">
@@ -254,7 +272,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="js/chart-zoom.js"></script>
 <script src="data/dataset.js"></script>
+<script src="data/surveys.js"></script>
 <script src="js/model.js"></script>
+<script src="js/mk-ensemble.js"></script>
 <script src="js/mk-core.js"></script>
 <script src="js/skills.js"></script>
 <script src="js/skill.js"></script>

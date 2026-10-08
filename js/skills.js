@@ -1,5 +1,5 @@
 // ===== «Дағдылар» каталогы (skills.html) + ортақ көмекші функциялар (skill.html да қолданады) =====
-// Тәуелділіктер: data/dataset.js, js/model.js, js/mk-core.js
+// Тәуелділіктер: data/dataset.js, js/model.js, js/mk-core.js; міндетті емес: data/surveys.js + js/mk-ensemble.js (ансамбль)
 
 const MKSkills = (() => {
   const D = MK.D;
@@ -33,6 +33,13 @@ const MKSkills = (() => {
 
   const badge = g => `<span class="sk-badge ${g >= 0 ? 'is-up' : 'is-down'}">${g >= 0 ? '▲' : '▼'} ${MK.pct(g)}</span>`;
   const money = s => (s ? `${MK.fmt(s / 1000)} мың ₸` : '—');
+
+  // Сауалнама жоқ болса — «Жұмыс берушілер бағасы» сұрыптауын алып тастаймыз
+  // (mk-filters.js чиптерді DOMContentLoaded-ке дейін жасайды, сондықтан бірден)
+  if (typeof document !== 'undefined' && !(typeof MKEnsemble !== 'undefined' && MKEnsemble.has)) {
+    const o = document.querySelector('#fSort option[value="survey"]');
+    if (o) o.remove();
+  }
 
   // ---------- Каталог ----------
   function catalog() {
@@ -108,7 +115,9 @@ const MKSkills = (() => {
         demand: (a, b) => b.base - a.base,
         salary: (a, b) => b.salary - a.salary,
         az: (a, b) => a.name.localeCompare(b.name, 'kk'),
-      }[sort];
+        // Жұмыс берушілер бағасы: дауыстар сальдосы (өседі − азаяды) / n, тең болса — «табу қиын» үлесі
+        survey: (a, b) => (b.surveyScore ?? -9) - (a.surveyScore ?? -9) || (b.hardShare ?? 0) - (a.hardShare ?? 0),
+      }[sort] || ((a, b) => b.growth - a.growth);
       rs.sort(cmp);
       els.count.textContent = rs.length;
 
@@ -123,6 +132,7 @@ const MKSkills = (() => {
             ${badge(r.growth)}
           </div>
           <ul class="skc__tags">${sectorNames(r.k).map(s => `<li>${MK.esc(s)}</li>`).join('')}</ul>
+          ${r.surveyN ? `<p class="skc__svy" title="Ансамбль: (1 − w) · модель + w · сауалнама, w = ${r.surveyW.toFixed(2)}">Модель ${MK.pct(r.growthModel)} · жұмыс берушілер ${MK.pct(r.growthSurvey)} <small>(n=${r.surveyN})</small> · табу қиын ${Math.round(r.hardShare * 100)}%</p>` : ''}
           <div class="skc__spark">${sparkline(r.series, r.fc)}
             <div class="skc__axis"><span>2020</span><span>қазір</span><span>${state.year}</span></div></div>
           <dl class="skc__stats">

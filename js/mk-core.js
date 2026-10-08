@@ -1,5 +1,6 @@
 // ===== Мансап Компасы — ортақ деректер кітапханасы =====
-// Барлық беттер қолданады. Тәуелділіктер: data/dataset.js (window.MK_DATA), js/model.js (MKModel), Chart.js (графиктер үшін).
+// Барлық беттер қолданады. Тәуелділіктер: data/dataset.js (window.MK_DATA), js/model.js (MKModel), Chart.js (графиктер үшін),
+// js/mk-ensemble.js (MKEnsemble — міндетті емес: болса, дағды болжамдары сауалнамамен біріктіріледі).
 //
 // Вакансия жазбасы: [ай, өңір, сала, лауазым(мамандық), компания, жалақы (мың ₸), [дағдылар], дереккөз, тәжірибе]
 
@@ -98,14 +99,18 @@ const MK = (() => {
 
   // --- Болжам: бір серия үшін ---
   // year — болжам жылы (мыс. 2030). Нәтиже: соңғы 12 ай (base), сол жылдағы болжам (target, lo, hi), өсу.
-  function forecastSeries(series, year) {
+  // ens = {k, f} берілсе (дағды сериясы), нәтиже сауалнамамен ансамбльге біріктіріледі (js/mk-ensemble.js):
+  // growthModel — тек модель, growthSurvey — жұмыс берушілер, surveyN/surveyW — жауап саны мен салмағы, growth — ансамбль.
+  function forecastSeries(series, year, ens) {
     const horizon = Math.max(4, (year - Q0) * 4 + 3 - LASTQ);
     const model = MKModel.fit(series);
     const fc = MKModel.forecast(model, horizon);
     const last4 = a => a.slice(-4).reduce((x, y) => x + y, 0);
     const base = last4(series);
     const target = last4(fc.mean);
-    return { model, fc, horizon, base, target, lo: last4(fc.lo), hi: last4(fc.hi), growth: base ? target / base - 1 : 0 };
+    const r = { model, fc, horizon, base, target, lo: last4(fc.lo), hi: last4(fc.hi), growth: base ? target / base - 1 : 0 };
+    if (ens && ens.k >= 0 && typeof MKEnsemble !== 'undefined') MKEnsemble.blend(r, ens.k, ens.f || {}, horizon);
+    return r;
   }
 
   // --- Барлық дағдыға болжам: сүзгі бойынша (мамандық, өңір, сала) ---
@@ -115,7 +120,7 @@ const MK = (() => {
     const res = [];
     D.skills.forEach((name, k) => {
       const series = agg.counts[k];
-      const r = forecastSeries(series, year);
+      const r = forecastSeries(series, year, { k, f });
       if (r.base < minBase) return;
       res.push({
         k, name, series, ...r,

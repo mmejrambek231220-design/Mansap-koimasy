@@ -149,3 +149,35 @@
   .fc-hero::before { animation: none; }
   .bar__fill { transition: none; }
 }
+
+/* ===== Ансамбль: модель + сауалнама ===== */
+.fc-mode { margin-top: 28px; display: inline-flex; align-items: center; gap: 4px; padding: 4px; border-radius: 99px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); }
+.fc-mode[hidden] { display: none; }
+.fc-mode span { padding: 0 10px 0 12px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #C9B3C1; }
+.fc-mode button { padding: 9px 16px; border-radius: 99px; font-size: 14px; font-weight: 600; color: #E6D6E0; transition: background .2s, color .2s; }
+.fc-mode button:hover { color: var(--white); }
+.fc-mode button.is-active { background: var(--pink-soft); color: var(--black); }
+
+.bar__track { position: relative; }
+.bar__mk { position: absolute; top: 0; bottom: 0; left: min(var(--m), calc(100% - 3px)); display: block; width: 3px; background: var(--plum); border-radius: 2px; opacity: .7; }
+.lg-model { background: repeating-linear-gradient(90deg, #9A7F90 0 2px, transparent 2px 6px); }
+.legend li[hidden] { display: none; }
+
+.sc__ens { margin-top: 18px; padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,.07); font-size: 14px; line-height: 1.55; color: #E6D6E0; display: grid; gap: 6px; }
+.sc__ens b { color: var(--white); }
+.sc__ens small { color: #B79FAF; font-size: 12px; }
+.sc__ens-note { color: #FFD9A0; font-size: 13px; }
+
+.steps.steps--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.ens-box { margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; }
+.ens-box[hidden] { display: none; }
+.ens-box__text { background: var(--white); border-radius: var(--radius); padding: 28px; }
+.ens-box__text h3 { font-size: 20px; }
+.ens-box__text p { margin-top: 10px; font-size: 15px; line-height: 1.65; color: var(--text); }
+.ens-box__text code { font-family: var(--mono); font-size: 13px; background: var(--beige); padding: 1px 6px; border-radius: 6px; white-space: nowrap; }
+.ens-box__demo { color: #A15C00 !important; font-size: 14px !important; }
+.ens-box__nums { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ens-box__nums div { background: var(--plum); color: var(--white); border-radius: var(--radius); padding: 22px; }
+.ens-box__nums b { font-size: 32px; letter-spacing: -.02em; }
+.ens-box__nums span { display: block; margin-top: 4px; color: #D8C6D1; font-size: 14px; line-height: 1.4; }
+.mk-hint__line { display: inline-block; width: 3px; height: 12px; background: var(--plum); opacity: .7; border-radius: 2px; vertical-align: -1px; }

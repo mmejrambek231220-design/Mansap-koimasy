@@ -137,3 +137,32 @@
 /* Рейтинг: «+16,9 п.т.» сыятындай мән бағаны */
 #topList .bar { grid-template-columns: 30px minmax(0, 220px) minmax(0, 1fr) 96px; }
 #topList .bar__val { white-space: nowrap; }
+
+/* ===== Сауалнама: сұраныс пен түлектер, дағды олқылығы ===== */
+.mx td.num small.mx-ens { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.pf-demand[hidden], .pf-sec[hidden] { display: none; }
+.pf-demand .panel-box__head > p { margin-top: 8px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+.lg-vac { height: 12px !important; background: var(--plum); border-radius: 3px !important; }
+.lg-grad { height: 12px !important; background: var(--rose); border-radius: 3px !important; }
+
+.sh-status { margin-top: 14px; font-size: 36px; font-weight: 700; letter-spacing: -.02em; }
+.sh-status small { display: block; margin-top: 4px; font-size: 14px; font-weight: 500; letter-spacing: 0; color: #C9B3C1; }
+.sh-status--short { color: #FF8A9B; }
+.sh-status--balance { color: #9FE0BC; }
+.sh-status--surplus { color: var(--pink-soft); }
+
+.gp-list { margin-top: 22px; display: grid; gap: 10px; }
+.gp { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr) minmax(0, 200px); gap: 24px; align-items: center; padding: 16px 18px; border: 1px solid #ECE7E3; border-radius: 12px; }
+.gp__name a { font-weight: 600; }
+.gp__name a:hover { color: #7A2E8E; text-decoration: underline; }
+.gp__name small { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+.gp__bars { display: grid; gap: 6px; }
+.gp__bars div { display: grid; grid-template-columns: 90px minmax(0, 1fr) 56px; gap: 12px; align-items: center; font-size: 13px; }
+.gp__bars span:first-child { color: var(--muted); }
+.gp__bars b { text-align: right; font-variant-numeric: tabular-nums; }
+.gp__track { height: 8px; background: #F1EEEC; border-radius: 99px; overflow: hidden; }
+.gp__track i { display: block; height: 100%; border-radius: 99px; }
+.gp__dem { background: var(--grad); }
+.gp__tg { background: #9A7F90; }
+.gp__pl { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.gp__pl b { color: #1F8A5B; }

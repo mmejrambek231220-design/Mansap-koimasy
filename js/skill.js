@@ -1,11 +1,13 @@
 // ===== Бір дағдының беті (skill.html?id=K) =====
-// Тәуелділіктер: data/dataset.js, js/model.js, js/mk-core.js, js/skills.js (MKSkills), Chart.js
+// Тәуелділіктер: data/dataset.js, js/model.js, js/mk-core.js, js/skills.js (MKSkills), Chart.js,
+// data/surveys.js + js/mk-ensemble.js (міндетті емес: сауалнама панелі және ансамбльдік болжам)
 
 (() => {
   const { D, fmt, pct, esc, link, LASTQ } = MK;
   const { sparkline, badge, money, sectorNames, isSoft } = MKSkills;
   const $ = id => document.getElementById(id);
   const MIN_TITLE_BASE = 12; // мамандық бойынша болжам үшін соңғы 12 айдағы ең аз вакансия саны
+  const ENS = typeof MKEnsemble !== 'undefined' && MKEnsemble.has ? MKEnsemble : null;
 
   const raw = MK.param('id');
   const k = raw !== null && /^\d+$/.test(raw) ? +raw : -1;
@@ -51,7 +53,7 @@
     // 1) Осы дағдының серия мен болжамы (сүзгі бойынша)
     const agg = MK.aggregate(MK.filter({ region, title }));
     const series = agg.counts[k];
-    const r = MK.forecastSeries(series, year);
+    const r = MK.forecastSeries(series, year, { k, f: { region, title } });   // сауалнама болса — ансамбль
     const bt = MKModel.backtest(series);
     const salary = agg.salN[k] ? agg.salSum[k] / agg.salN[k] * 1000 : 0;
     const share = r.base / Math.max(1, agg.totalLast);
@@ -61,7 +63,8 @@
     $('sdBig').className = `sd-big ${up ? 'is-up' : 'is-down'}`;
     $('sdBig').innerHTML = `<span class="sd-big__lbl">Болжамды өзгеріс</span>
       <b>${up ? '▲' : '▼'} ${pct(r.growth)}</b>
-      <span class="sd-big__sub">${year} жылы соңғы 12 аймен салыстырғанда</span>`;
+      <span class="sd-big__sub">${year} жылы соңғы 12 аймен салыстырғанда${r.ensemble
+        ? `<br>модель ${pct(r.growthModel)} · жұмыс берушілер ${pct(r.growthSurvey)} (w=${r.surveyW.toFixed(2)})` : ''}</span>`;
 
     const scope = [region >= 0 ? D.regions[region] : 'Барлық Қазақстан', title >= 0 ? D.titles[title] : null].filter(Boolean).join(' · ');
     $('sdScope').textContent = scope;
@@ -83,7 +86,7 @@
     const gain = bt.naiveMape > 0 ? 1 - bt.mape / bt.naiveMape : 0;
     $('sdModel').innerHTML = `
       <p class="sc__label">Болжам моделі</p>
-      <h3 class="sc__name">Holt damped trend</h3>
+      <h3 class="sc__name">Holt damped trend${r.ensemble ? ' + сауалнама' : ''}</h3>
       <div class="sc__growth ${up ? 'is-up' : 'is-down'}">${fmt(r.target)} <small>${year} жылғы болжамды вакансиялар (${fmt(r.lo)}–${fmt(r.hi)})</small></div>
       <dl class="sc__stats">
         <div><dt>α (деңгей)</dt><dd>${r.model.alpha}</dd></div>
@@ -93,10 +96,12 @@
         <div><dt>Тексеру қателігі (MAPE)</dt><dd>${(bt.mape * 100).toFixed(1)}%</dd></div>
         <div><dt>Қарапайым әдіс (MAPE)</dt><dd>${(bt.naiveMape * 100).toFixed(1)}%</dd></div>
       </dl>
+      ${ENS ? ENS.cardHtml(r) : ''}
       <p class="sc__model">Тексеру: соңғы 4 тоқсан модельден жасырылып, болжаммен салыстырылды.
       ${gain > 0 ? `Модель қарапайым әдістен ${(gain * 100).toFixed(0)}% дәлірек.` : 'Бұл серияда қарапайым әдіс те жақсы нәтиже береді.'}
       Үйрету деректері: ${series.length} тоқсан, ${fmt(series.reduce((a, b) => a + b, 0))} вакансия.</p>`;
 
+    renderSurvey(r, title);
     renderTitles(region, year, title);
     renderRegions(title);
     renderCo(region, title);
@@ -119,7 +124,7 @@
     for (let t = 0; t < S; t++) {
       const total = ser[t].reduce((a, b) => a + b, 0);
       if (!total) continue;
-      const r = MK.forecastSeries(ser[t], year);
+      const r = MK.forecastSeries(ser[t], year, { k, f: { region, title: t } });
       const row = { t, r, share: r.base / Math.max(1, totLast[t]) };
       (r.base >= MIN_TITLE_BASE ? rows : few).push(row);
     }
@@ -144,6 +149,44 @@
       ? `Деректері аз мамандықтар (соңғы 12 айда ${MIN_TITLE_BASE}-ден аз вакансия): ` +
         few.map(({ t, r }) => `<a href="${link.profession(t)}">${esc(D.titles[t])}</a> (${fmt(r.base)})`).join(', ')
       : '';
+  }
+
+  // 1б) Жұмыс берушілер сауалнамасы: өседі / өзгермейді / азаяды, «табу қиын», модель мен ансамбль
+  function renderSurvey(r, title) {
+    $('sdSurvey').hidden = !ENS;
+    if (!ENS) return;
+    const m = ENS.meta();
+    $('svDemo').textContent = m.demo ? `⚠ Қазір демо жауаптар: ${m.employers} жұмыс беруші (нақты: ${m.realEmployers || 0}).` : `Жұмыс берушілер: ${m.employers}.`;
+    const all = ENS.score(ENS.votes(k, {}).v);
+    const stack = (sc, big) => sc.n ? `<div class="sv-stack${big ? ' sv-stack--big' : ''}">
+        <i class="sv-up" style="width:${(sc.up / sc.n * 100).toFixed(1)}%"></i>
+        <i class="sv-same" style="width:${(sc.same / sc.n * 100).toFixed(1)}%"></i>
+        <i class="sv-down" style="width:${(sc.down / sc.n * 100).toFixed(1)}%"></i></div>` : '<div class="sv-stack sv-stack--empty"></div>';
+    const p = (x, n) => (n ? Math.round(x / n * 100) + '%' : '—');
+    const gE = r.surveyW ? (1 - r.surveyW) * r.growthModel + r.surveyW * r.growthSurvey : r.growthModel;
+    const scope = title >= 0 ? `«${D.sectors[D.titleSector[title]]}» саласының` : +els.region.value >= 0 ? `${D.regions[+els.region.value]} өңірінің` : 'барлық жұмыс берушілердің';
+    $('svMain').innerHTML = `
+      <p class="sv-cap">Барлық жұмыс берушілер · n = ${all.n}</p>
+      ${stack(all, true)}
+      <ul class="sv-legend">
+        <li><i class="sv-up"></i>Сұраныс өседі <b>${p(all.up, all.n)}</b></li>
+        <li><i class="sv-same"></i>Өзгермейді <b>${p(all.same, all.n)}</b></li>
+        <li><i class="sv-down"></i>Азаяды <b>${p(all.down, all.n)}</b></li>
+      </ul>
+      <div class="sv-kpis">
+        <div><b>${all.hardShare === null ? '—' : Math.round(all.hardShare * 100) + '%'}</b><span>маманды табу қиын дейді</span></div>
+        <div><b>${pct(r.growthModel)}</b><span>тек модель, ${els.year.value}</span></div>
+        <div><b>${r.growthSurvey === null ? '—' : pct(r.growthSurvey)}</b><span>жұмыс берушілер бағасы<br><small>${scope} жауаптары, n=${r.surveyN}</small></span></div>
+        <div class="is-ens"><b>${pct(gE)}</b><span>ансамбль<br><small>w = ${r.surveyW.toFixed(2)}${r.surveyW ? '' : ' — жауап аз'}</small></span></div>
+      </div>`;
+    const selSec = title >= 0 ? D.titleSector[title] : -1;
+    const rows = ENS.sectorVotes(k).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
+    $('svSectors').innerHTML = rows.length ? rows.map(x => `
+      <li class="${x.i === selSec ? 'is-sel' : ''}">
+        <span class="sv-sec__name">${esc(D.sectors[x.i])} <small>n=${x.n}</small></span>
+        ${stack(x)}
+        <span class="sv-sec__val" title="Сальдо: (өседі − азаяды) / n">${x.s >= 0 ? '+' : '−'}${Math.abs(Math.round(x.s * 100))}</span>
+      </li>`).join('') : '<li class="empty">Салалар бойынша жауаптар жоқ.</li>';
   }
 
   // 3) Өңірлер бойынша (соңғы 12 ай)

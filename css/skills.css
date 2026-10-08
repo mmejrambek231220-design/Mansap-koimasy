@@ -153,3 +153,35 @@
 .sd-jobs-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .sd-jobs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .sd-jobs .job { color: inherit; }
+
+/* ---------- Дағды беті: жұмыс берушілер сауалнамасы ---------- */
+.sd-sec[hidden] { display: none; }
+.sv-grid { margin-top: 24px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.sv-cap { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.sv-cap small { font-weight: 400; text-transform: none; letter-spacing: 0; }
+.sv-stack { display: flex; height: 12px; border-radius: 99px; overflow: hidden; background: #F1EEEC; }
+.sv-stack--big { height: 22px; }
+.sv-stack i { display: block; height: 100%; }
+.sv-up { background: #1C9A5A; }
+.sv-same { background: #D9CFD5; }
+.sv-down { background: #E8506A; }
+.sv-legend { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); }
+.sv-legend li { display: flex; align-items: center; gap: 8px; }
+.sv-legend i { width: 12px; height: 12px; border-radius: 3px; }
+.sv-legend b { color: var(--ink); }
+.sv-kpis { margin-top: 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.sv-kpis div { background: var(--beige); border-radius: 12px; padding: 16px 18px; }
+.sv-kpis b { display: block; font-size: 28px; letter-spacing: -.02em; }
+.sv-kpis span { display: block; margin-top: 4px; font-size: 14px; color: var(--muted); line-height: 1.4; }
+.sv-kpis small { font-size: 12px; }
+.sv-kpis .is-ens { background: var(--plum); color: var(--white); }
+.sv-kpis .is-ens b { color: var(--pink-soft); }
+.sv-kpis .is-ens span { color: #D8C6D1; }
+.sv-sectors ul { display: grid; gap: 4px; }
+.sv-sectors li { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr) 44px; gap: 14px; align-items: center; padding: 8px 10px; border-radius: 10px; }
+.sv-sectors li.is-sel { background: #F6E9F3; }
+.sv-sec__name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sv-sec__name small { color: var(--muted); font-weight: 400; font-size: 12px; }
+.sv-sec__val { text-align: right; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; color: #7A2E8E; }
+.skc__svy { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.skc__svy small { font-size: 11px; }

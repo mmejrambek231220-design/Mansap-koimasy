@@ -1,7 +1,8 @@
 // ===== Мансап Компасы — «Мамандық болжамы» беті (profession.html?id=T) =====
-// Тәуелділіктер: mk-core.js (MK), professions.js (MKProf)
+// Тәуелділіктер: mk-core.js (MK), professions.js (MKProf), mk-ensemble.js (MKEnsemble — міндетті емес)
 (function professionPage() {
   const D = MK.D;
+  const ENS = typeof MKEnsemble !== 'undefined' && MKEnsemble.has ? MKEnsemble : null;
   const $ = id => document.getElementById(id);
   const esc = MK.esc;
   const t = MK.param('id') === null || MK.param('id') === '' ? NaN : Number(MK.param('id'));
@@ -47,7 +48,20 @@
   }).join('') : '<p class="empty">Осы салада басқа мамандық жоқ.</p>';
 
   let st = { p: null, selected: null, mode: 'share' };
-  let skillChart = null, demandChart = null;
+  let skillChart = null, demandChart = null, shortChart = null;
+
+  // Түлектермен салыстыру үшін — бүкіл Қазақстан бойынша сұраныс (түлектер саны да ел бойынша), 2030-ға дейін.
+  // Күнтізбелік жыл = 4 тоқсан: өткен тоқсандар — нақты, қалғаны — модель болжамы.
+  const supply = ENS ? ENS.supply(t) : null;
+  const natYear = (() => {
+    if (!supply) return null;
+    const ser = MK.aggregate(MK.filter({ title: t })).total, r = MK.forecastSeries(ser, 2030);
+    return y => {
+      let sum = 0;
+      for (let q = (y - MK.Q0) * 4; q < (y - MK.Q0) * 4 + 4; q++) sum += q <= MK.LASTQ ? ser[q] : r.fc.mean[q - MK.LASTQ - 1] || 0;
+      return sum;
+    };
+  })();
 
   // --- Есептеу ---
   function compute() {
@@ -76,6 +90,7 @@
     $('kpiNaive').textContent = p.naive !== null ? (p.naive * 100).toFixed(1) + '%' : '—';
 
     renderDemand();
+    renderShortage();
 
     if (!p.skills.length) {
       const msg = '<li class="empty">Бұл өңір бойынша осы мамандыққа деректер жеткіліксіз. «Барлық Қазақстан» таңдаңыз.</li>';
@@ -83,11 +98,13 @@
       $('matrix').innerHTML = '<tr><td colspan="6" class="empty">Деректер жеткіліксіз.</td></tr>';
       $('skillCard').innerHTML = ''; $('chartTitle').textContent = '—'; $('topNote').textContent = '';
       if (skillChart) { skillChart.destroy(); skillChart = null; }
+      $('pfGap').hidden = true;
     } else {
       renderTop();
       renderDown();
       renderMatrix();
       renderSkill();
+      renderGap();
     }
     renderJobs();
   }
@@ -105,7 +122,8 @@
     const max = Math.max(...list.map(metric), 0.01);
     $('topList').innerHTML = list.map((s, i) => {
       const v = metric(s);
-      return `<li><button class="bar ${s.k === st.selected ? 'is-active' : ''}" data-k="${s.k}" title="${esc(MKProf.CATS[s.cat].name)}">
+      const tip = MKProf.CATS[s.cat].name + (s.ensemble ? ` · өсу: модель ${MK.pct(s.growthModel)}, сауалнама ${MK.pct(s.growthSurvey)} (n=${s.surveyN}), ансамбль ${MK.pct(s.growth)}` : '');
+      return `<li><button class="bar ${s.k === st.selected ? 'is-active' : ''}" data-k="${s.k}" title="${esc(tip)}">
         <span class="bar__rank">${String(i + 1).padStart(2, '0')}</span>
         <span class="bar__name">${esc(s.name)}${s.core ? ' <em class="core">негізгі</em>' : ''}</span>
         <span class="bar__track"><span class="bar__fill ${v < 0 ? 'is-neg' : ''}" style="--w:${Math.max(2, Math.abs(v) / max * 100)}%"></span></span>
@@ -132,7 +150,7 @@
         <td class="num">${MKProf.share(s.shareNow)}</td>
         <td class="num"><b>${MKProf.share(s.shareFut)}</b></td>
         <td class="num ${s.delta >= 0 ? 'is-up' : 'is-down'}">${MKProf.pp(s.delta)}</td>
-        <td class="num">${MK.pct(s.growth)}</td>
+        <td class="num">${MK.pct(s.growth)}${s.ensemble ? `<small class="mx-ens" title="Тек модель / жұмыс берушілер сауалнамасы (n=${s.surveyN}, w=${s.surveyW.toFixed(2)})">модель ${MK.pct(s.growthModel)} · сауалн. ${MK.pct(s.growthSurvey)}</small>` : ''}</td>
         <td>${MKProf.badge(s.cat)}</td>
       </tr>`).join('');
   }
@@ -155,6 +173,7 @@
         <div><dt>Сұраныс өсуі</dt><dd>${MK.pct(s.growth)}</dd></div>
         <div><dt>Орташа жалақы</dt><dd>${s.salary ? MK.fmt(s.salary / 1000) + ' мың ₸' : '—'}</dd></div>
       </dl>
+      ${ENS ? ENS.cardHtml(s) : ''}
       <p class="sc__model">Модель: α=${s.model.alpha}, β=${s.model.beta}, φ=${s.model.phi}${s.bt ? ` · MAPE ${(s.bt.mape * 100).toFixed(1)}%` : ''}${s.base < 15 ? '<br>⚠ Деректер аз — болжам сенімсіз' : ''}</p>`;
     skillChart = MK.drawForecastChart($('skillChart'), s.series, s, skillChart);
   }
@@ -173,6 +192,74 @@
         <div><dt>${p.year} жылғы болжам</dt><dd>${MK.fmt(d.target)} <small>(${MK.fmt(d.lo)}–${MK.fmt(d.hi)})</small></dd></div>
       </dl>
       <p class="sc__model">Модель: α=${d.model.alpha}, β=${d.model.beta}, φ=${d.model.phi}</p>`;
+  }
+
+  // Сұраныс пен түлектер: «Тапшылық / Теңгерім / Артық»
+  function renderShortage() {
+    $('pfShort').hidden = !supply;
+    if (!supply) return;
+    const p = st.p, years = supply.years, labels = years.map(String);
+    const y = Math.min(Math.max(p.year, years[0]), years[years.length - 1]);
+    const b = ENS.balance(natYear(y), supply.at(y));
+    const data = [years.map(natYear), supply.graduates];
+    // Болжам жылы қанық түспен ерекшеленеді
+    const colors = i => labels.map(l => (+l === y ? (i ? '#E8506A' : '#2B0C1F') : (i ? 'rgba(232,80,106,.4)' : 'rgba(43,12,31,.4)')));
+    if (shortChart) {
+      shortChart.data.datasets.forEach((d, i) => { d.data = data[i]; d.backgroundColor = colors(i); });
+      shortChart.update();
+    } else {
+      shortChart = new Chart($('shortChart'), {
+        type: 'bar',
+        data: { labels, datasets: [
+          { label: 'Вакансиялар', data: data[0], backgroundColor: colors(0), borderRadius: 6, maxBarThickness: 46 },
+          { label: 'Түлектер', data: data[1], backgroundColor: colors(1), borderRadius: 6, maxBarThickness: 46 },
+        ] },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#2B0C1F', padding: 12,
+            callbacks: { label: c => ` ${c.dataset.label}: ${MK.fmt(c.raw)}`, footer: items => {
+              const v = items[0].raw, g = items[1] && items[1].raw;
+              return g ? `Вакансия / түлек: ${(v / g).toFixed(2).replace('.', ',')}` : '';
+            } } } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#777' } },
+            y: { beginAtZero: true, grid: { color: '#EEE' }, border: { display: false }, ticks: { color: '#777', callback: v => MK.fmt(v) } },
+          },
+        },
+      });
+    }
+
+    const emp = supply.employment;
+    $('shortCard').innerHTML = `
+      <p class="sc__label">Бүкіл Қазақстан · ${y} жыл</p>
+      <h3 class="sc__name">Сұраныс пен түлектер</h3>
+      ${b ? `<div class="sh-status sh-status--${b.id}">${b.name}<small>вакансия / түлек = ${b.ratio.toFixed(2).replace('.', ',')} · ${b.hint}</small></div>` : '<p class="sc__ens-note">Түлектер туралы дерек жоқ.</p>'}
+      <dl class="sc__stats">
+        <div><dt>${y} жылғы вакансиялар</dt><dd>${MK.fmt(natYear(y))}</dd></div>
+        <div><dt>${y} жылғы түлектер</dt><dd>${MK.fmt(supply.at(y) || 0)}</dd></div>
+        <div><dt>Жұмыс берушілер жалдауды жоспарлап отыр</dt><dd>${supply.hires !== null ? MK.fmt(supply.hires) : '—'} <small>адам</small></dd></div>
+        <div><dt>Оқу бағдарламалары</dt><dd>${supply.programs}${emp !== null ? ` <small>· жұмысқа орналасу ${Math.round(emp * 100)}%</small>` : ''}</dd></div>
+      </dl>
+      <p class="sc__model">Вакансия / түлек &gt; 1,25 — тапшылық, &lt; 0,8 — артық, арасы — теңгерім. Вакансиялар — платформа деректері мен болжамы; түлектер мен жалдау жоспары — сауалнама (${ENS.meta().demo ? 'демо' : 'нақты'}).</p>`;
+  }
+
+  // Дағды олқылығы: нарықта үлесі жоғары немесе тез өсетін, бірақ оқу бағдарламалары аз оқытатын дағдылар
+  function renderGap() {
+    $('pfGap').hidden = !supply;
+    if (!supply) return;
+    const list = ENS.gap(t, st.p.skills);
+    const bar = (v, cls) => `<span class="gp__track"><i class="${cls}" style="width:${Math.min(100, v * 100).toFixed(1)}%"></i></span>`;
+    $('gapList').innerHTML = list.length ? list.slice(0, 8).map(g => `
+      <li class="gp">
+        <div class="gp__name"><a href="${MK.link.skill(g.k)}">${esc(g.name)}</a>
+          <small>${g.reason === 'share' ? 'вакансиялардың едәуір бөлігі сұрайды' : `сұраныс өсуі ${MK.pct(g.growth)}`}</small></div>
+        <div class="gp__bars">
+          <div><span>Нарық, ${st.p.year}</span>${bar(g.demand, 'gp__dem')}<b>${MKProf.share(g.demand)}</b></div>
+          <div><span>Оқытады</span>${bar(g.taught, 'gp__tg')}<b>${MKProf.share(g.taught)}</b></div>
+        </div>
+        <div class="gp__pl">${g.planned > 0 ? `<b>${MKProf.share(g.planned)}</b> бағдарлама қосуды жоспарлап отыр` : 'Қосу жоспарланбаған'}</div>
+      </li>`).join('') : '<li class="empty">Айқын олқылық табылмады: нарық сұрайтын дағдылар оқу бағдарламаларында жеткілікті оқытылады.</li>';
   }
 
   function renderJobs() {

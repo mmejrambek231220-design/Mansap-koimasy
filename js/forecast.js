@@ -1,7 +1,9 @@
 // ===== Мансап Компасы — «Дағдылар болжамы» беті =====
+// Тәуелділіктер: data/dataset.js, data/surveys.js (міндетті емес), js/model.js, js/mk-ensemble.js (міндетті емес), Chart.js
 (function forecastPage() {
   const D = window.MK_DATA;
   if (!D) return;
+  const ENS = typeof MKEnsemble !== 'undefined' && MKEnsemble.has ? MKEnsemble : null;   // сауалнама жоқ болса — тек модель
 
   const Q0 = 2020;                                  // бірінші тоқсан: 2020 Q1
   const NQ = Math.floor(D.meta.months / 3);         // толық тоқсандар саны
@@ -17,6 +19,7 @@
     top: $('topList'), down: $('downList'), card: $('skillCard'), jobs: $('jobList'),
     chartTitle: $('chartTitle'), yearLbl: document.querySelectorAll('[data-year]'),
     mMape: $('mMape'), mNaive: $('mNaive'), mGain: $('mGain'), mVac: $('mVac'),
+    kEns: $('kpiEns'), mode: $('fcMode'), ensSec: $('ensBox'),
   };
 
   // --- Сүзгі тізімдерін толтыру ---
@@ -86,13 +89,17 @@
       const sumY = arr => arr.slice(-4).reduce((a, b) => a + b, 0);
       const bt = MKModel.backtest(series);
       mapeSum += bt.mape; naiveSum += bt.naiveMape; nTest++;
-      results.push({
+      const r = {
         k, name, series, model, fc, bt, base,
         target: sumY(fc.mean), lo: sumY(fc.lo), hi: sumY(fc.hi),
         growth: sumY(fc.mean) / base - 1,
         salary: agg.salN[k] ? agg.salSum[k] / agg.salN[k] : 0,
         share: base / Math.max(1, agg.totalLast),
-      });
+      };
+      // Ансамбль: модель + жұмыс берушілер сауалнамасы (js/mk-ensemble.js). growthModel — тек модель.
+      if (ENS) ENS.blend(r, k, { region, sector, title }, horizon);
+      else r.growthModel = r.growth;
+      results.push(r);
     });
 
     state = { ...state, agg, results, year, horizon, region, sector, title,
@@ -115,6 +122,7 @@
     els.mNaive.textContent = (state.naive * 100).toFixed(1) + '%';
     els.mGain.textContent = state.naive > 0 ? Math.round((1 - state.mape / state.naive) * 100) + '%' : '—';
     els.mVac.textContent = fmt(agg.total);
+    renderEnsInfo();
 
     if (!results.length) {
       els.top.innerHTML = els.down.innerHTML = '<li class="empty">Бұл сүзгі бойынша деректер жеткіліксіз. Басқа өңір немесе сала таңдаңыз.</li>';
@@ -125,12 +133,15 @@
 
     // Ең көп өсетін 10 дағды
     const up = [...results].sort((a, b) => b.growth - a.growth).slice(0, 10);
-    const max = Math.max(...up.map(r => r.growth), 0.01);
+    const max = Math.max(...up.map(r => Math.max(r.growth, r.growthModel)), 0.01);
+    // Ансамбль режимінде жолақ — ансамбль, тік сызық — тек модельдің мәні
     els.top.innerHTML = up.map((r, i) => `
-      <li><button class="bar ${r.k === state.selected ? 'is-active' : ''}" data-k="${r.k}">
+      <li><button class="bar ${r.k === state.selected ? 'is-active' : ''}" data-k="${r.k}"
+        title="${r.ensemble ? `Модель: ${pct(r.growthModel)} · Жұмыс берушілер: ${pct(r.growthSurvey)} (n=${r.surveyN})` : 'Тек модель'}">
         <span class="bar__rank">${String(i + 1).padStart(2, '0')}</span>
         <span class="bar__name">${r.name}</span>
-        <span class="bar__track"><span class="bar__fill" style="--w:${Math.max(2, r.growth / max * 100)}%"></span></span>
+        <span class="bar__track"><span class="bar__fill" style="--w:${Math.max(2, r.growth / max * 100)}%"></span>${r.ensemble
+          ? `<i class="bar__mk" style="--m:${Math.max(0, r.growthModel / max * 100).toFixed(1)}%"></i>` : ''}</span>
         <span class="bar__val">${pct(r.growth)}</span>
       </button></li>`).join('');
 
@@ -141,6 +152,7 @@
         <span>${r.name}</span><b>${pct(r.growth)}</b>
       </button></li>`).join('') : '<li class="empty">Төмендейтін дағдылар табылмады.</li>';
 
+    $('mkHint').hidden = !up.some(r => r.ensemble);
     requestAnimationFrame(() => document.querySelectorAll('.bar__fill').forEach(b => b.classList.add('is-in')));
     els.skill.value = state.selected;
     renderSkill();
@@ -171,6 +183,7 @@
         <div><dt>Орташа жалақы</dt><dd>${fmt(r.salary)} мың ₸</dd></div>
         <div><dt>Вакансиялардағы үлесі</dt><dd>${(r.share * 100).toFixed(1)}%</dd></div>
       </dl>
+      ${ENS ? ENS.cardHtml(r) : ''}
       <p class="sc__sub">${state.sector >= 0 ? 'Сұраныс жоғары өңірлер' : 'Сұраныс жоғары салалар'}</p>
       <ul class="sc__dist">${topD}</ul>
       <p class="sc__model">Модель: α=${r.model.alpha}, β=${r.model.beta}, φ=${r.model.phi} · тексеру қателігі (MAPE) ${(r.bt.mape * 100).toFixed(1)}%</p>`;
@@ -193,6 +206,23 @@
     drawChart(r);
   }
 
+  // KPI мен «Модель қалай жұмыс істейді» бөліміндегі ансамбль ақпараты
+  function renderEnsInfo() {
+    if (!ENS) return;
+    const m = ENS.meta(), rs = state.results;
+    const used = rs.filter(r => r.ensemble).length;
+    const avgW = rs.length ? rs.reduce((a, r) => a + r.surveyW, 0) / rs.length : 0;
+    els.kEns.hidden = false;
+    els.kEns.innerHTML = ENS.on() ? `оның ${used}-і сауалнамамен түзетілген` : 'тек модель (сауалнамасыз)';
+    $('eEmp').textContent = fmt(m.employers || 0);
+    $('ePrg').textContent = fmt(m.programs || 0);
+    $('eW').textContent = avgW.toFixed(2);
+    $('eUsed').textContent = `${used} / ${rs.length}`;
+    $('eDemo').textContent = m.demo
+      ? `⚠ Сауалнама жауаптары — демо деректер (нақты жауаптар: жұмыс берушілер ${m.realEmployers || 0}, оқу бағдарламалары ${m.realPrograms || 0}).`
+      : `Нақты жауаптар: жұмыс берушілер ${m.realEmployers || 0}, оқу бағдарламалары ${m.realPrograms || 0}.`;
+  }
+
   function drawChart(r) {
     const n = NQ + state.horizon;
     const labels = Array.from({ length: n }, (_, q) => qLabel(q));
@@ -202,11 +232,16 @@
     const fc = pad([lastVal, ...r.fc.mean], LASTQ);
     const hi = pad([lastVal, ...r.fc.hi], LASTQ);
     const lo = pad([lastVal, ...r.fc.lo], LASTQ);
+    // Ансамбль режимінде — тек модельдің болжамы салыстыру үшін жіңішке сызықпен
+    const fcModel = r.ensemble && r.fcModel ? pad([lastVal, ...r.fcModel.mean], LASTQ) : pad([], 0);
+    const lgModel = document.getElementById('lgModel');
+    if (lgModel) lgModel.hidden = !r.ensemble;
     const datasets = [
       { label: 'Жоғарғы шек', data: hi, borderWidth: 0, pointRadius: 0, fill: '+1', backgroundColor: 'rgba(232,80,106,.14)' },
       { label: 'Төменгі шек', data: lo, borderWidth: 0, pointRadius: 0, fill: false },
       { label: 'Нақты сұраныс', data: actual, borderColor: '#2B0C1F', backgroundColor: '#2B0C1F', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, tension: .3 },
       { label: 'Болжам', data: fc, borderColor: '#E8506A', backgroundColor: '#E8506A', borderWidth: 2.5, borderDash: [7, 6], pointRadius: 0, pointHoverRadius: 5, tension: .3 },
+      { label: 'Тек модель', data: fcModel, borderColor: '#9A7F90', backgroundColor: '#9A7F90', borderWidth: 1.5, borderDash: [2, 4], pointRadius: 0, pointHoverRadius: 4, tension: .3 },
     ];
 
     if (chart) {
@@ -226,7 +261,7 @@
           legend: { display: false },
           tooltip: {
             backgroundColor: '#2B0C1F', padding: 12, titleFont: { family: 'Inter', weight: '600' }, bodyFont: { family: 'Inter' },
-            filter: i => i.raw !== null && !(i.datasetIndex === 3 && i.dataIndex === LASTQ),
+            filter: i => i.raw !== null && !(i.datasetIndex >= 3 && i.dataIndex === LASTQ),
             callbacks: { label: c => ` ${c.dataset.label}: ${fmt(c.raw)} вакансия` },
           },
         },
@@ -271,6 +306,26 @@
     state.selected = +b.dataset.k; renderSkill();
     if (window.innerWidth < 1024) $('trend').scrollIntoView({ behavior: 'smooth' });
   });
+
+  // Болжам режимі: «Модель» / «Модель + сауалнама»
+  if (ENS) {
+    els.mode.hidden = false;
+    els.ensSec.hidden = false;
+    $('ensStep').hidden = false;
+    document.querySelector('.steps').classList.add('steps--5');
+    const sync = () => els.mode.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('is-active', b.dataset.mode === ENS.mode);
+      b.setAttribute('aria-pressed', b.dataset.mode === ENS.mode);
+    });
+    sync();
+    els.mode.addEventListener('click', e => {
+      const b = e.target.closest('button[data-mode]');
+      if (!b || b.dataset.mode === ENS.mode) return;
+      ENS.setMode(b.dataset.mode);
+      sync();
+      compute();
+    });
+  }
 
   compute();
 })();

@@ -78,7 +78,7 @@
         <button class="menu__link" aria-haspopup="true">Ресурстар <span class="chev">⌄</span></button>
         <ul class="dropdown">
           <li><a href="index.html#research">Зерттеулер</a></li>
-          <li><a href="#">Әдістеме</a></li>
+          <li><a href="model.html">Әдістеме</a></li>
           <li><a href="#">Блог</a></li>
         </ul>
       </li>
@@ -208,6 +208,35 @@
     <aside class="skill-card" id="demandCard"></aside>
   </section>
 
+  <!-- SUPPLY vs DEMAND (сауалнама: data/surveys.js) -->
+  <section class="container pf-sec pf-demand" id="pfShort" hidden>
+    <div class="panel-box">
+      <div class="panel-box__head">
+        <p class="eyebrow">Сұраныс пен ұсыныс</p>
+        <h2>Вакансиялар және түлектер, 2026–2030</h2>
+        <p>Жыл сайынғы вакансиялар (2026 — нақты + болжам, кейін — болжам) оқу орындарының осы мамандық бойынша түлектерімен салыстырылады. Екеуі де бүкіл Қазақстан бойынша.</p>
+        <ul class="legend">
+          <li><i class="lg-vac"></i>Вакансиялар</li>
+          <li><i class="lg-grad"></i>Түлектер</li>
+        </ul>
+      </div>
+      <div class="chart-wrap"><canvas id="shortChart" aria-label="Вакансиялар мен түлектер графигі" role="img"></canvas></div>
+    </div>
+    <aside class="skill-card" id="shortCard"></aside>
+  </section>
+
+  <!-- SKILL GAP -->
+  <section class="container pf-sec" id="pfGap" hidden>
+    <div class="panel-box">
+      <div class="panel-box__head">
+        <p class="eyebrow">Дағды олқылығы</p>
+        <h2>Нарық сұрайды, бірақ аз оқытылады</h2>
+        <p>«Нарық» — дағдының <span data-year>2030</span> жылғы мамандық вакансияларындағы болжамды үлесі; «Оқытады» — осы мамандық бойынша дағдыны оқытатын бағдарламалар үлесі. Белгі қойылады: үлесі ≥ 25% болып, бағдарламалар оның жартысынан азын оқытса, немесе дағды тез өссе (≥ +20%), бірақ бағдарламалардың 25%-дан азы оқытса.</p>
+      </div>
+      <ul class="gp-list" id="gapList"></ul>
+    </div>
+  </section>
+
   <!-- VACANCIES -->
   <section class="container jobs-sec">
     <div class="pf-src">
@@ -231,7 +260,7 @@
   </section>
 
   <section class="container prof-note">
-    <p>ⓘ Болжамдар Holt damped trend (демпферленген тренд) моделімен <b>демо деректер</b> бойынша құрылған. Дағдының және мамандықтың жалпы сұранысы жеке болжанады, үлес олардың қатынасы ретінде есептеледі. Бір мамандыққа вакансия саны аз (әсіресе бір өңір бойынша), сондықтан сенімділік аралығы кең — нәтижені бағыт ретінде қабылдаңыз. Соңғы 12 айда <b id="minBaseNote">8</b> вакансиядан аз кездескен дағдылар болжамға кірмейді.</p>
+    <p>ⓘ Болжамдар Holt damped trend (демпферленген тренд) моделімен <b>демо деректер</b> бойынша құрылған. Дағдының және мамандықтың жалпы сұранысы жеке болжанады, үлес олардың қатынасы ретінде есептеледі. Бір мамандыққа вакансия саны аз (әсіресе бір өңір бойынша), сондықтан сенімділік аралығы кең — нәтижені бағыт ретінде қабылдаңыз. Соңғы 12 айда <b id="minBaseNote">8</b> вакансиядан аз кездескен дағдылар болжамға кірмейді. Сауалнама деректері болса, дағды болжамы жұмыс берушілердің бағасымен біріктіріледі (ансамбль, сауалнама салмағы ≤ 50%; толығырақ — «Дағдылар болжамы» бетінде).</p>
   </section>
   </div>
 
@@ -257,7 +286,7 @@
         <div><h5>Деректер</h5><a href="vacancies.html">Вакансиялар</a><a href="skills.html">Дағдылар</a><a href="professions.html">Мамандықтар</a><a href="#">Жалақы</a><a href="#">Өңірлер</a></div>
         <div><h5>Болжамдар</h5><a href="forecast.html">Дағдылар болжамы</a><a href="#">Олқылық талдауы</a><a href="#">Мансап кеңесшісі</a></div>
         <div><h5>Кімге</h5><a href="index.html#students">Студенттер</a><a href="index.html#employers">Жұмыс берушілер</a><a href="index.html#universities">Оқу орындары</a></div>
-        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="#">Әдістеме</a><a href="#">Байланыс</a></div>
+        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="model.html">Әдістеме</a><a href="#">Байланыс</a></div>
       </div>
     </div>
     <div class="footer__bottom">
@@ -273,7 +302,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="js/chart-zoom.js"></script>
 <script src="data/dataset.js"></script>
+<script src="data/surveys.js"></script>
 <script src="js/model.js"></script>
+<script src="js/mk-ensemble.js"></script>
 <script src="js/mk-core.js"></script>
 <script src="js/professions.js"></script>
 <script src="js/profession.js"></script>

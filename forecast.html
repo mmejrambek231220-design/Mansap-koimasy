@@ -77,7 +77,7 @@
         <button class="menu__link" aria-haspopup="true">Ресурстар <span class="chev">⌄</span></button>
         <ul class="dropdown">
           <li><a href="index.html#research">Зерттеулер</a></li>
-          <li><a href="#">Әдістеме</a></li>
+          <li><a href="model.html">Әдістеме</a></li>
           <li><a href="#">Блог</a></li>
         </ul>
       </li>
@@ -114,6 +114,12 @@
       <h1>Дағдылар <span class="grad-text">болжамы</span></h1>
       <p class="fc-hero__lead">Машиналық оқыту моделі вакансиялар тарихын талдап, <span data-year>2030</span> жылға дейін қандай дағдыларға сұраныс өсетінін болжайды.</p>
 
+      <div class="fc-mode" id="fcMode" role="group" aria-label="Болжам түрі" hidden>
+        <span>Болжам:</span>
+        <button type="button" data-mode="model">Модель</button>
+        <button type="button" data-mode="ensemble">Модель + сауалнама</button>
+      </div>
+
       <form class="filters" onsubmit="return false" aria-label="Сүзгілер">
         <label><span>Өңір</span>
           <select id="fRegion"><option value="-1">Барлық Қазақстан</option></select></label>
@@ -132,7 +138,7 @@
   <!-- KPI -->
   <section class="kpis container" aria-label="Негізгі көрсеткіштер">
     <div class="kpi"><b id="kpiVac">—</b><span>талданған вакансия</span></div>
-    <div class="kpi"><b id="kpiSkills">—</b><span>болжанған дағды</span></div>
+    <div class="kpi"><b id="kpiSkills">—</b><span>болжанған дағды<br><small id="kpiEns" hidden></small></span></div>
     <div class="kpi"><b>2020–2026</b><span>деректер кезеңі</span></div>
     <div class="kpi"><b id="kpiMape">—</b><span>модель қателігі (MAPE)<br><small>қарапайым әдісте: <i id="kpiNaive">—</i></small></span></div>
   </section>
@@ -142,7 +148,7 @@
     <div class="panel-box">
       <div class="panel-box__head">
         <h2>Ең жылдам өсетін 10 дағды</h2>
-        <p>Соңғы 12 аймен салыстырғанда <span data-year>2030</span> жылғы болжамды сұраныс. Толығырақ көру үшін дағдыны басыңыз.</p>
+        <p>Соңғы 12 аймен салыстырғанда <span data-year>2030</span> жылғы болжамды сұраныс. Толығырақ көру үшін дағдыны басыңыз.<span class="mk-hint" id="mkHint" hidden> Жолақ — модель мен сауалнаманың ансамблі, <i class="mk-hint__line"></i> — тек модельдің мәні.</span></p>
       </div>
       <ol class="bars" id="topList"></ol>
     </div>
@@ -165,6 +171,7 @@
           <li><i class="lg-actual"></i>Нақты сұраныс</li>
           <li><i class="lg-fc"></i>Болжам</li>
           <li><i class="lg-band"></i>80% сенімділік аралығы</li>
+          <li id="lgModel" hidden><i class="lg-model"></i>Тек модель (сауалнамасыз)</li>
         </ul>
       </div>
       <div class="chart-wrap"><canvas id="trendChart" aria-label="Дағдыға сұраныс графигі" role="img"></canvas></div>
@@ -188,12 +195,26 @@
         <li><b>02</b><h3>Дағдыларды бөліп алу</h3><p>Вакансия мәтінінен дағдылар сөздік пен NLP әдістері арқылы анықталып, бірыңғай атауға келтіріледі.</p></li>
         <li><b>03</b><h3>Уақыттық қатар</h3><p>Әр дағды үшін тоқсан сайынғы вакансиялар саны есептеледі. Өңір мен сала бойынша сүзуге болады.</p></li>
         <li><b>04</b><h3>Болжам</h3><p>Holt damped trend моделі әр дағдыға жеке үйретіледі. α, β, φ параметрлері қатені азайту арқылы автоматты таңдалады.</p></li>
+        <li id="ensStep" hidden><b>05</b><h3>Ансамбль</h3><p>Модель болжамы жұмыс берушілер сауалнамасымен біріктіріледі: жауап көп болған сайын сауалнаманың салмағы артады (ең көбі 50%).</p></li>
       </ol>
       <div class="metrics">
         <div><b id="mMape">—</b><span>Модельдің орташа қателігі (MAPE)</span></div>
         <div><b id="mNaive">—</b><span>Қарапайым әдістің қателігі<br><small>«келесі тоқсан — соңғы тоқсанмен бірдей»</small></span></div>
         <div><b id="mGain">—</b><span>Қателіктің азаюы</span></div>
         <div><b id="mVac">—</b><span>Үйретуге қолданылған вакансиялар</span></div>
+      </div>
+      <div class="ens-box" id="ensBox" hidden>
+        <div class="ens-box__text">
+          <h3>Модель + сауалнама (ансамбль)</h3>
+          <p>Жұмыс берушілер әр дағдыға «сұраныс өседі / өзгермейді / азаяды» деп жауап береді. Дауыстар сальдосы <code>s = (өседі − азаяды) / n</code> өсуге айналады: <code>gS = s · 0,6 · жыл / 4</code> (барлығы «өседі» десе — 4 жылда +60%). Сауалнама салмағы <code>w = n / (n + 20) · 0,5</code>, ал n &lt; 5 болса w = 0. Қорытынды өсу: <code>g = (1 − w) · gМодель + w · gS</code>. Болжам мәні осы өсуге жылжиды, 80% аралықтың ені сақталады. Сала таңдалса — сол саладағы жұмыс берушілердің, өңір таңдалса — сол өңірдің жауаптары қолданылады.</p>
+          <p class="ens-box__demo" id="eDemo"></p>
+        </div>
+        <div class="ens-box__nums">
+          <div><b id="eEmp">—</b><span>жұмыс беруші сауалнамасы</span></div>
+          <div><b id="ePrg">—</b><span>оқу бағдарламасы</span></div>
+          <div><b id="eW">—</b><span>орташа салмақ w</span></div>
+          <div><b id="eUsed">—</b><span>сауалнамамен түзетілген дағды</span></div>
+        </div>
       </div>
       <p class="model-note">Тексеру әдісі: соңғы 4 тоқсан модельден жасырылады, модель қалған деректермен үйретіліп, жасырылған тоқсандарды болжайды, содан кейін нәтиже нақты мәндермен салыстырылады.<br>
       ⚠ Қазір <b>демо деректер</b> қолданылуда (hh.kz құрылымына ұқсас 100 000+ синтетикалық вакансия). Нақты деректер жиналғаннан кейін модель өзгеріссіз жұмыс істей береді.</p>
@@ -224,7 +245,7 @@
         <div><h5>Деректер</h5><a href="vacancies.html">Вакансиялар</a><a href="skills.html">Дағдылар</a><a href="professions.html">Мамандықтар</a><a href="#">Жалақы</a><a href="#">Өңірлер</a></div>
         <div><h5>Болжамдар</h5><a href="forecast.html">Дағдылар болжамы</a><a href="#">Олқылық талдауы</a><a href="#">Мансап кеңесшісі</a></div>
         <div><h5>Кімге</h5><a href="index.html#students">Студенттер</a><a href="index.html#employers">Жұмыс берушілер</a><a href="index.html#universities">Оқу орындары</a></div>
-        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="#">Әдістеме</a><a href="#">Байланыс</a></div>
+        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="model.html">Әдістеме</a><a href="#">Байланыс</a></div>
       </div>
     </div>
     <div class="footer__bottom">
@@ -241,7 +262,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="js/chart-zoom.js"></script>
 <script src="data/dataset.js"></script>
+<script src="data/surveys.js"></script>
 <script src="js/model.js"></script>
+<script src="js/mk-ensemble.js"></script>
 <script src="js/forecast.js"></script>
 <script src="js/mk-filters.js"></script>
 </body>
