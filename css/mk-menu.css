@@ -8,7 +8,7 @@
 
   .mega {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 70;
-    background: var(--white); color: var(--ink); border-radius: 18px; overflow: hidden;
+    background: var(--white); color: var(--ink); border-radius: 16px; overflow: hidden;
     box-shadow: 0 30px 80px rgba(0,0,0,.28);
     opacity: 0; visibility: hidden; transform: translateY(-8px);
     transition: opacity .2s, transform .2s, visibility .2s;
@@ -20,21 +20,21 @@
 }
 @media (max-width: 1024px) { .mega { display: none; } }
 
-.mega__main { display: grid; grid-template-columns: 380px minmax(0, 1fr); min-height: 300px; }
+.mega__main { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: 240px; }
 
 /* Сол жақтағы санаттар */
 .mega__tabs { list-style: none; margin: 0; padding: 0; background: #F6F4F2; }
 .mega__tab {
-  width: 100%; display: block; text-align: left; padding: 28px 32px 30px;
+  width: 100%; display: block; text-align: left; padding: 20px 24px 22px;
   border-bottom: 2px solid transparent; transition: background .15s;
 }
 .mega__tab.is-active { background: var(--white); border-bottom-color: var(--rose); }
-.mega__tab-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: .01em; color: var(--ink); }
+.mega__tab-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: .01em; color: var(--ink); }
 .mega__tab.is-active .mega__tab-title { color: var(--rose); }
-.mega__tab-text { display: block; margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--text); }
+.mega__tab-text { display: block; margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--text); }
 .mg-chev { margin-left: auto; color: #AAA; flex: none; }
 .mega__tab.is-active .mg-chev { color: var(--rose); }
-.mg-ico { display: inline-grid; width: 22px; height: 22px; flex: none; }
+.mg-ico { display: inline-grid; width: 18px; height: 18px; flex: none; }
 .mg-ico svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .mg-ext { flex: none; }
 
@@ -44,10 +44,10 @@
 
 /* Сілтемелер бағандары */
 .mg-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); height: 100%; }
-.mg-col { padding: 30px 36px; border-left: 1px solid #EFECE9; }
+.mg-col { padding: 22px 26px; border-left: 1px solid #EFECE9; }
 .mg-col:first-child { border-left: 0; }
-.mg-col h4 { font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; margin-bottom: 18px; }
-.mg-col a { display: flex; align-items: center; gap: 8px; padding: 9px 0; font-size: 16px; color: var(--ink); }
+.mg-col h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; margin-bottom: 12px; }
+.mg-col a { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14.5px; color: var(--ink); }
 .mg-col a span { background: linear-gradient(var(--rose), var(--rose)) 0 100% / 0 1.5px no-repeat; transition: background-size .25s; }
 .mg-col a:hover span { background-size: 100% 1.5px; }
 .mg-col a:hover { color: var(--rose); }
@@ -57,46 +57,47 @@
 /* Аудитория карточкалары (суретпен) */
 .mg-people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); height: 100%; }
 .mg-person {
-  position: relative; display: flex; flex-direction: column; padding: 28px 30px 0; min-height: 360px;
+  position: relative; display: flex; flex-direction: column; padding: 22px 24px 0; min-height: 280px;
   border-left: 1px solid #EFECE9; color: var(--ink); overflow: hidden;
 }
-.mg-person h4 { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; }
-.mg-person p { margin-top: 14px; font-size: 15px; line-height: 1.55; color: var(--text); max-width: 300px; }
+.mg-person h4 { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; }
+.mg-person p { margin-top: 10px; font-size: 13.5px; line-height: 1.5; color: var(--text); max-width: 280px; }
 .mg-person img {
-  margin-top: auto; align-self: center; width: auto; max-width: 100%; height: 210px; object-fit: contain; object-position: bottom;
+  margin-top: auto; align-self: center; width: auto; max-width: 100%; height: 160px; object-fit: contain; object-position: bottom;
   transition: transform .35s cubic-bezier(.2,.7,.2,1);
 }
 .mg-person:hover h4 { color: var(--rose); }
 .mg-person:hover img { transform: translateY(-6px) scale(1.03); }
 
 /* Зерттеу карточкалары */
-.mg-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 28px 32px; }
+.mg-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 22px 26px; }
 .mg-card { display: flex; flex-direction: column; gap: 10px; color: var(--ink); }
-.mg-card img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; transition: transform .3s; }
+.mg-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; transition: transform .3s; }
 .mg-card:hover img { transform: scale(1.03); }
 .mg-card__tag { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--rose); }
-.mg-card h4 { font-size: 16px; line-height: 1.35; }
+.mg-card h4 { font-size: 14.5px; line-height: 1.35; }
 .mg-card:hover h4 { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Сандар */
-.mg-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 30px 36px 0; }
-.mg-stats div { background: var(--beige); border-radius: 14px; padding: 22px; }
-.mg-stats b { display: block; font-size: 32px; letter-spacing: -.02em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mg-stats span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.45; color: var(--text); }
-.mg-more { display: inline-flex; gap: 8px; margin: 22px 36px 0; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.mg-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 22px 26px 0; }
+.mg-stats div { background: var(--beige); border-radius: 12px; padding: 16px 18px; }
+.mg-stats b { display: block; font-size: 26px; letter-spacing: -.02em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mg-stats span { display: block; margin-top: 4px; font-size: 13px; line-height: 1.45; color: var(--text); }
+.mg-more { display: inline-flex; gap: 8px; margin: 18px 26px 0; font-size: 14.5px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
 .mg-more span { transition: transform .2s; }
 .mg-more:hover span { transform: translateX(4px); }
-.mg-about { padding-bottom: 28px; }
-.mg-about__topic { padding: 30px 36px 0; font-size: 20px; line-height: 1.45; font-weight: 600; letter-spacing: -.01em; max-width: 720px; }
+.mg-about { padding-bottom: 22px; }
+.mg-about__topic { padding: 22px 26px 0; font-size: 17px; line-height: 1.45; font-weight: 600; letter-spacing: -.01em; max-width: 720px; }
 .mg-about .mg-stats { padding-top: 22px; }
 
 /* Төменгі шолу жолағы */
 .mega__foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: #FBF0F7; }
-.mega__foot-text { padding: 26px 32px 28px; }
-.mega__eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 17px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.mega__foot-text { padding: 18px 24px 20px; }
+.mega__eyebrow { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 14px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
 .mega__eyebrow .mg-ico { color: var(--rose); }
-.mega__foot-text > p:not(.mega__eyebrow) { margin-top: 12px; font-size: 17px; line-height: 1.5; color: var(--ink); }
-.mega__foot-text > a { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 17px; font-weight: 500; color: var(--ink); }
+.mega__foot-text > p:not(.mega__eyebrow) { margin-top: 8px; font-size: 14.5px; line-height: 1.5; color: var(--ink); }
+.mega__foot-text > a { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 14.5px; font-weight: 500; color: var(--ink); }
 .mega__foot-text > a:hover { color: var(--rose); }
 .mega__art { position: relative; overflow: hidden; }
-.mega__art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mega__art svg, .mega__art img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mega__art img { object-fit: cover; object-position: right center; }

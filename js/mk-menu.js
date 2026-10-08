@@ -45,7 +45,7 @@
   const stats = list => `<div class="mg-stats">${list.map(s =>
     `<div><b>${s.value}</b><span>${s.label}</span></div>`).join('')}</div>`;
 
-  // Төменгі жолақтағы безендіру
+  // Төменгі жолақтағы безендіру (немесе сурет жолы: art: 'assets/img/...')
   const ART = {
     stripes: `<svg viewBox="0 0 600 200" preserveAspectRatio="none">${[0, 1, 2, 3, 4, 5, 6, 7].map(i => {
       const w = [420, 360, 300, 470, 240, 390, 150, 330][i];
@@ -97,7 +97,7 @@
           ]) },
       ],
       foot: { icon: 'data', eyebrow: 'Деректерге шолу', text: '2020–2026 жылдардағы 100 000-нан астам вакансия: болжам моделі осы деректерде үйренеді',
-        link: { text: 'Деректер базасын ашу', href: 'vacancies.html' }, art: 'stripes' },
+        link: { text: 'Деректер базасын ашу', href: 'vacancies.html' }, art: 'assets/img/menu-laptop.png' },
     },
     { // Болжамдар
       tabs: [
@@ -133,7 +133,7 @@
           ]) },
       ],
       foot: { icon: 'apps', eyebrow: 'Қолдану жағдайлары', text: 'Мансап Компасының деректері мен болжамдары кімге және қалай көмектеседі',
-        link: { text: 'Барлығын қарау', href: home('#students') }, art: 'steps' },
+        link: { text: 'Барлығын қарау', href: home('#students') }, art: 'assets/img/menu-team.png' },
     },
     { // Ресурстар
       tabs: [
@@ -193,7 +193,7 @@
           <p>${m.foot.text}</p>
           ${link({ ...m.foot.link, text: m.foot.link.text })}
         </div>
-        <div class="mega__art">${ART[m.foot.art]}</div>
+        <div class="mega__art">${ART[m.foot.art] || `<img src="${m.foot.art}" alt="" loading="lazy">`}</div>
       </div>`;
     item.classList.add('has-mega');
     item.append(mega);

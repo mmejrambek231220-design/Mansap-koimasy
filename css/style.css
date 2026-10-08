@@ -20,6 +20,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* ПК-де бүкіл сайт 80% масштабта — түпнұсқа Lightcast сияқты «алыстан» көрінеді */
+@media (min-width: 1025px) { html { zoom: .8; } }
 body {
   margin: 0;
   font-family: var(--font);
@@ -65,7 +67,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 .btn--dark:hover { box-shadow: 0 8px 24px rgba(0,0,0,.25); }
 .btn--pink { background: var(--pink-soft); color: var(--black); }
 .btn--pink:hover { background: #F9D6F4; }
-.btn--sm { padding: 10px 20px; font-size: 15px; }
+.btn--sm { padding: 9px 18px; font-size: 14px; }
 
 .link { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; display: inline-flex; gap: 8px; }
 .link span { text-decoration: none; transition: transform .2s; }
@@ -88,8 +90,8 @@ ul { list-style: none; margin: 0; padding: 0; }
 .menu { display: flex; gap: 8px; }
 .menu__item { position: relative; }
 .menu__link {
-  color: var(--white); font-weight: 500; font-size: 15px;
-  padding: 10px 12px; border-radius: 8px; display: inline-flex; gap: 6px; align-items: center;
+  color: var(--white); font-weight: 500; font-size: 14px;
+  padding: 8px 10px; border-radius: 8px; display: inline-flex; gap: 6px; align-items: center;
 }
 .menu__link:hover { background: rgba(255,255,255,.08); }
 .chev { font-size: 12px; transform: translateY(-2px); transition: transform .2s; }
@@ -109,7 +111,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 .menu__mobile-cta { display: none; }
 
 .nav__right { display: flex; align-items: center; gap: 22px; }
-.nav__signin { color: var(--white); font-weight: 500; font-size: 15px; text-decoration: underline; text-underline-offset: 4px; }
+.nav__signin { color: var(--white); font-weight: 500; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
 .burger { display: none; width: 40px; height: 40px; position: relative; }
 .burger span { position: absolute; left: 9px; right: 9px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .25s; }
 .burger span:nth-child(1) { top: 13px; } .burger span:nth-child(2) { top: 19px; } .burger span:nth-child(3) { top: 25px; }
