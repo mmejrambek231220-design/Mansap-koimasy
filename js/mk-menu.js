@@ -112,7 +112,7 @@
             { value: 'Holt', label: 'сөндірілген трендпен экспоненциалды тегістеу' },
             { value: '≈8%', label: 'орташа қателік (MAPE), соңғы 4 тоқсанда тексерілді' },
             { value: '80%', label: 'болжамның сенім аралығы' },
-          ]) + `<a class="mg-more" href="forecast.html#model">Модель қалай жұмыс істейді <span>→</span></a>` },
+          ]) + `<a class="mg-more" href="model.html">Модель қалай жұмыс істейді <span>→</span></a>` },
       ],
       foot: { icon: 'chart', eyebrow: 'Болжам 2030', text: 'Әр дағды мен мамандық үшін модель тоқсан сайын жаңа деректермен қайта үйренеді',
         link: { text: 'Болжамды ашу', href: 'forecast.html' }, art: 'assets/img/menu-team.png' },
@@ -145,7 +145,7 @@
           ]) },
         { icon: 'doc', title: 'Әдістеме', text: 'Деректер қалай жиналады, өңделеді және болжанады',
           body: cols([
-            { title: 'Әдістеме', links: [{ text: 'Болжам моделі', href: 'forecast.html#model' }, { text: 'Деректер жинау', href: `${REPO}/tree/main/collector`, ext: true }, { text: 'Дағдыларды анықтау', href: `${REPO}/blob/main/collector/common/skills.py`, ext: true }] },
+            { title: 'Әдістеме', links: [{ text: 'Болжам моделі', href: 'model.html' }, { text: 'Деректер жинау', href: `${REPO}/tree/main/collector`, ext: true }, { text: 'Дағдыларды анықтау', href: `${REPO}/blob/main/collector/common/skills.py`, ext: true }] },
             { title: 'Бастапқы код', links: [{ text: 'GitHub репозиторийі', href: REPO, ext: true }, { text: 'README', href: `${REPO}#readme`, ext: true }] },
           ]) },
       ],
