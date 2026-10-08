@@ -68,11 +68,14 @@
 - «жақында» белгісі — әлі жасалмаған беттер (`href="#"`).
 
 ### 8. Авторизация — `login.html`, `server/` (SQL Server)
-- `login.html` + `css/auth.css` + `js/auth.js`: Кіру / Тіркелу қойындылары, рөл таңдау (студент / жұмыс беруші / оқу орны), құпиясөз күші, кірген соң профиль карточкасы.
+- `login.html` + `css/auth.css` + `js/auth.js`: HubID үлгісіндегі жалғыз карточка (тақырып/футер жоқ). Кіру тек **телефон нөмірі** немесе **Google** арқылы:
+  1) нөмір енгізіледі → `phone/check`; тіркелген болса — құпиясөз қадамы, жоқ болса — тіркелу (аты-жөні, рөл, ұйым, құпиясөз);
+  2) Google (GIS, `GOOGLE_CLIENT_ID` керек) → бар болса кіреді, жоқ болса рөл/ұйым толтырып `google/complete`.
+  Кіргеннен кейін `account.html`-ге бағытталады. Нұсқаулық — `server/README.md`.
 - `js/mk-auth.js` (барлық бетте): `MKAuth {api, me, logout, ready, roleIcon}`; тақырыптағы «Кіру» орнына рөл белгішесі (студент — бітіруші қалпағы, жұмыс беруші — ғимарат, оқу орны — кітап) + аты + «Шығу». API жоқ болса (статикалық сервер), ештеңе өзгермейді.
-- `server/server.js` — Express: статикалық сайт + `/api/auth/{register,login,logout,me}`. `server/`, `collector/`, `.git` сыртқа берілмейді.
+- `server/server.js` — Express: статикалық сайт + `/api/auth/{config,phone/check,register,login,google,google/complete,logout,me}`. `server/`, `collector/`, `.git` сыртқа берілмейді.
 - `server/db.js` — `mssql/msnodesqlv8`, Windows аутентификациясы (ODBC Driver 18). Жергілікті сервер: SQL Server 2025, `localhost`, тек Windows auth.
-- `server/schema.sql` — `dbo.Users`, `dbo.Sessions`; `npm run db:init` дерекқорды жасайды. Құпиясөз — bcrypt, сессия — HttpOnly cookie.
+- `server/schema.sql` — `dbo.Users` (Phone / Email / GoogleId — сүзгіленген бірегей индекстер, PasswordHash NULL болуы мүмкін), `dbo.Sessions`; `npm run db:init` дерекқорды жасайды. Құпиясөз — bcrypt, сессия — HttpOnly cookie.
 - Іске қосу: `cd server && npm start` → http://localhost:3000 (`.claude/launch.json` → "mansap-server").
 
 ### 9. Сауалнамалар және ансамбль болжам
@@ -108,8 +111,9 @@
 - Сауалнамалар (жұмыс беруші, оқу орны), жеке кабинет, ансамбль болжам және тапшылық индексі қосылды (3 субагент).
 - «Модель қалай жұмыс істейді» беті: анимация (7 көрініс) және 8 формула дереккөздерімен.
 - «Жаңа зерттеу» жолағы барлық беттен алынды; аватарда рөл белгішесі; model.html — тек анимация, ақ фон.
+- Кіру беті HubID үлгісінде қайта жасалды: тек телефон нөмірі және Google; Users кестесіне Phone, GoogleId қосылды.
 
 ## Тексеру
 - Жергілікті сервер: `npx serve .` немесе `.claude/launch.json` → "mansap-kompasy" (port 5173, тек статикалық).
-- Авторизациямен: `cd server && npm start` (port 3000). Тексеруден кейін тест пайдаланушыларын `dbo.Users`-тен өшір.
+- Авторизациямен: `cd server && npm start` (port 3000). Тексеруден кейін тест пайдаланушыларын `dbo.Users`-тен өшір (тест нөмірлері `+7700000….`). sqlcmd-те сүзгіленген индекстерге байланысты `-I` (QUOTED_IDENTIFIER ON) қажет.
 - Collector тест базасын (`data/check.db`) тексерген соң өшір — `*.db` `.gitignore`-да.

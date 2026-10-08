@@ -35,10 +35,11 @@ npm start         # http://localhost:3000
 | `DB_SERVER` | `localhost` (мыс. `localhost\SQLEXPRESS`) |
 | `DB_NAME` | `MansapKompasy` |
 | `DB_DRIVER` | `ODBC Driver 18 for SQL Server` |
+| `GOOGLE_CLIENT_ID` | бос (Google арқылы кіру өшірулі) |
 
 ## Дерекқор схемасы (`schema.sql`)
 
-**dbo.Users** — `Id`, `FullName`, `Email` (бірегей), `PasswordHash` (bcrypt), `Role` (`student` / `employer` / `education`), `CreatedAt`, `LastLoginAt`.
+**dbo.Users** — `Id`, `FullName`, `Phone`, `Email`, `GoogleId` (үшеуі де толтырылса бірегей — сүзгіленген индекстер), `PasswordHash` (bcrypt; Google пайдаланушысында NULL), `Role` (`student` / `employer` / `education`), `OrganizationId`, `CreatedAt`, `LastLoginAt`.
 
 **dbo.Sessions** — `Token` (кездейсоқ 64 hex), `UserId` → Users, `CreatedAt`, `ExpiresAt`.
 
@@ -59,10 +60,25 @@ npm start         # http://localhost:3000
 
 | Әдіс | Жол | Денесі | Жауабы |
 |---|---|---|---|
-| POST | `/api/auth/register` | `{ fullName, email, password, role, orgName?, sector?, region? }` | `{ ok, user }` + cookie |
-| POST | `/api/auth/login` | `{ email, password, remember }` | `{ ok, user }` + cookie |
+| GET | `/api/auth/config` | — | `{ ok, googleClientId \| null }` |
+| POST | `/api/auth/phone/check` | `{ phone }` | `{ ok, phone, exists }` — нөмір тіркелген бе |
+| POST | `/api/auth/register` | `{ fullName, phone, password, role, orgName?, sector?, region? }` | `{ ok, user }` + cookie |
+| POST | `/api/auth/login` | `{ phone, password, remember }` | `{ ok, user }` + cookie |
+| POST | `/api/auth/google` | `{ credential }` (Google ID token) | `{ ok, user }` немесе `{ ok, needProfile, pending, fullName, email }` |
+| POST | `/api/auth/google/complete` | `{ pending, fullName, role, orgName?, sector?, region? }` | `{ ok, user }` + cookie |
 | POST | `/api/auth/logout` | — | `{ ok }` |
 | GET | `/api/auth/me` | — | `{ ok, user \| null }` |
+
+Кіру екі жолмен ғана: **телефон нөмірі** (+ құпиясөз) және **Google**. Нөмір `+77XXXXXXXXX` түріне келтіріледі (`8 701…`, `+7 701…`, `701…` қабылданады). Google арқылы алғаш кірген адам рөл мен ұйымды таңдайды (`google/complete`); бұрын поштамен тіркелген аккаунт сол Google поштасымен автоматты байланысады.
+
+### Google арқылы кіруді қосу
+1. https://console.cloud.google.com → жоба жасау → **APIs & Services → OAuth consent screen** (External, тест пайдаланушыларына өз поштаңызды қосыңыз).
+2. **Credentials → Create credentials → OAuth client ID** → түрі *Web application* → **Authorized JavaScript origins**: `http://localhost:3000`.
+3. Шыққан Client ID-ді серверге беріп іске қосыңыз (PowerShell):
+   ```powershell
+   $env:GOOGLE_CLIENT_ID="xxxx.apps.googleusercontent.com"; npm start
+   ```
+Client ID берілмесе, кіру бетіндегі Google батырмасы «бапталмаған» деген хабар көрсетеді, телефон арқылы кіру жұмыс істей береді.
 
 `register`: `employer` / `education` рөлдері үшін `orgName` міндетті (2–200 таңба), `sector`, `region` — қосымша. `user` объектісінде `organization: { id, name, type, sector, region } | null`.
 

@@ -5,14 +5,33 @@ IF OBJECT_ID('dbo.Users', 'U') IS NULL
 CREATE TABLE dbo.Users (
   Id            INT IDENTITY(1,1) PRIMARY KEY,
   FullName      NVARCHAR(100)  NOT NULL,
-  Email         NVARCHAR(254)  NOT NULL,
-  PasswordHash  VARCHAR(100)   NOT NULL,          -- bcrypt хэші, құпиясөздің өзі сақталмайды
+  Phone         VARCHAR(20)    NULL,              -- +77XXXXXXXXX (телефон арқылы тіркелгенде)
+  Email         NVARCHAR(254)  NULL,              -- Google арқылы тіркелгенде
+  GoogleId      VARCHAR(64)    NULL,              -- Google аккаунтының тұрақты ID-і (sub)
+  PasswordHash  VARCHAR(100)   NULL,              -- bcrypt хэші; Google пайдаланушысында жоқ
   Role          VARCHAR(20)    NOT NULL
     CONSTRAINT CK_Users_Role CHECK (Role IN ('student', 'employer', 'education')),
   CreatedAt     DATETIME2(0)   NOT NULL CONSTRAINT DF_Users_CreatedAt DEFAULT SYSUTCDATETIME(),
-  LastLoginAt   DATETIME2(0)   NULL,
-  CONSTRAINT UQ_Users_Email UNIQUE (Email)
+  LastLoginAt   DATETIME2(0)   NULL
 );
+
+-- Ескі дерекқорды жаңарту: пошта міндетті емес, телефон мен Google ID қосылады
+IF COL_LENGTH('dbo.Users', 'Phone') IS NULL ALTER TABLE dbo.Users ADD Phone VARCHAR(20) NULL;
+IF COL_LENGTH('dbo.Users', 'GoogleId') IS NULL ALTER TABLE dbo.Users ADD GoogleId VARCHAR(64) NULL;
+IF EXISTS (SELECT 1 FROM sys.key_constraints WHERE name = 'UQ_Users_Email')
+  ALTER TABLE dbo.Users DROP CONSTRAINT UQ_Users_Email;
+IF COLUMNPROPERTY(OBJECT_ID('dbo.Users'), 'Email', 'AllowsNull') = 0
+  ALTER TABLE dbo.Users ALTER COLUMN Email NVARCHAR(254) NULL;
+IF COLUMNPROPERTY(OBJECT_ID('dbo.Users'), 'PasswordHash', 'AllowsNull') = 0
+  ALTER TABLE dbo.Users ALTER COLUMN PasswordHash VARCHAR(100) NULL;
+
+-- Бірегейлік тек толтырылған мәндерге (NULL бірнеше рет бола алады). EXEC — жаңа бағандар бір пакетте танылуы үшін.
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'UX_Users_Phone')
+  EXEC('CREATE UNIQUE INDEX UX_Users_Phone ON dbo.Users(Phone) WHERE Phone IS NOT NULL');
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'UX_Users_Email')
+  EXEC('CREATE UNIQUE INDEX UX_Users_Email ON dbo.Users(Email) WHERE Email IS NOT NULL');
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'UX_Users_GoogleId')
+  EXEC('CREATE UNIQUE INDEX UX_Users_GoogleId ON dbo.Users(GoogleId) WHERE GoogleId IS NOT NULL');
 
 IF OBJECT_ID('dbo.Sessions', 'U') IS NULL
 CREATE TABLE dbo.Sessions (

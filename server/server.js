@@ -2,8 +2,12 @@
 // Сайттың статикалық файлдарын береді, авторизация мен сауалнамалар API-ін ұсынады.
 // Пайдаланушылар, ұйымдар мен сауалнамалар SQL Server-де сақталады (db.js, schema.sql).
 //
-//   POST   /api/auth/register  { fullName, email, password, role, orgName?, sector?, region? }
-//   POST   /api/auth/login     { email, password, remember }
+//   GET    /api/auth/config              { googleClientId }
+//   POST   /api/auth/phone/check         { phone } → тіркелген бе
+//   POST   /api/auth/register            { fullName, phone, password, role, orgName?, sector?, region? }
+//   POST   /api/auth/login               { phone, password, remember }
+//   POST   /api/auth/google              { credential } (Google ID token)
+//   POST   /api/auth/google/complete     { pending, fullName, role, orgName?, sector?, region? }
 //   POST   /api/auth/logout
 //   GET    /api/auth/me
 //   POST   /api/surveys/employer        (жұмыс беруші) сауалнама жасау/жаңарту
@@ -23,6 +27,7 @@ const { sql, getPool, SERVER, DATABASE } = require('./db');
 const { D, demand, nT, nK, nS } = require('./market');
 const { saveEmployerSurvey, saveProgram, loadSurveys } = require('./surveys-db');
 const { YEARS } = require('./surveys-agg');
+const { OAuth2Client } = require('google-auth-library');
 
 const PORT = Number(process.env.PORT) || 3000;
 const ROOT = path.join(__dirname, '..');
@@ -32,6 +37,9 @@ const ROLES = ['student', 'employer', 'education'];
 const DUMMY_HASH = bcrypt.hashSync('mansap-kompasy', 10);
 const SIZES = ['small', 'medium', 'large'];
 const nR = D.regions.length;
+// Google арқылы кіру: Google Cloud Console-дағы OAuth Client ID (server/README.md)
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const googleClient = GOOGLE_CLIENT_ID ? new OAuth2Client(GOOGLE_CLIENT_ID) : null;
 
 const app = express();
 app.disable('x-powered-by');
@@ -48,7 +56,7 @@ function setSessionCookie(res, token, maxAge) {
 }
 
 const publicUser = u => ({
-  id: Number(u.Id), fullName: u.FullName, email: u.Email, role: u.Role, createdAt: u.CreatedAt,
+  id: Number(u.Id), fullName: u.FullName, phone: u.Phone, email: u.Email, role: u.Role, createdAt: u.CreatedAt,
   organization: u.OrganizationId == null ? null : {
     id: Number(u.OrganizationId), name: u.OrgName, type: u.OrgType, sector: u.OrgSector, region: u.OrgRegion,
   },
@@ -57,7 +65,13 @@ const publicUser = u => ({
 const USER_SQL = `SELECT u.*, o.Name AS OrgName, o.Type AS OrgType, o.Sector AS OrgSector, o.Region AS OrgRegion
   FROM dbo.Users u LEFT JOIN dbo.Organizations o ON o.Id = u.OrganizationId`;
 const fail = (res, status, message) => res.status(status).json({ ok: false, message });
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+// Қазақстан нөмірі: 8 / 7 / +7 және 10 цифр (7XX XXX XX XX) → +77XXXXXXXXX
+function normPhone(v) {
+  let d = String(v || '').replace(/\D/g, '');
+  if (d.length === 11 && (d[0] === '7' || d[0] === '8')) d = d.slice(1);
+  return d.length === 10 && d[0] === '7' ? `+7${d}` : null;
+}
 
 // Сандарды тексеру (select мәндері жол болып келуі мүмкін)
 const num = v => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v);
@@ -74,15 +88,17 @@ async function inTx(db, fn) {
   catch (err) { await tx.rollback(); throw err; }
 }
 
-// Кіруді шектеу: бір IP-ден 15 минутта 10 сәтсіз әрекет
-const attempts = new Map();
-function tooManyAttempts(ip) {
-  const now = Date.now();
-  const list = (attempts.get(ip) || []).filter(t => now - t < 15 * 60 * 1000);
-  attempts.set(ip, list);
-  return list.length >= 10;
+// Әрекеттерді шектеу: бір IP-ден 15 минутта max рет
+function limiter(max) {
+  const hits = new Map();
+  const list = ip => (hits.get(ip) || []).filter(t => Date.now() - t < 15 * 60 * 1000);
+  return {
+    blocked: ip => { const l = list(ip); hits.set(ip, l); return l.length >= max; },
+    hit: ip => hits.set(ip, [...list(ip), Date.now()]),
+  };
 }
-const recordFailure = ip => attempts.set(ip, [...(attempts.get(ip) || []), Date.now()]);
+const loginLimit = limiter(10);   // сәтсіз кіру
+const checkLimit = limiter(60);   // нөмір тексеру
 
 async function createSession(res, userId, remember) {
   const token = crypto.randomBytes(32).toString('hex');
@@ -107,79 +123,163 @@ async function currentUser(req) {
   return recordset[0] || null;
 }
 
-// --- API ---
+// --- Тіркелу деректері: аты-жөні, рөл, ұйым ---
+function parseProfile(b) {
+  const fullName = String(b.fullName || '').trim();
+  const role = String(b.role || '');
+  const orgName = String(b.orgName || '').trim();
+  const sector = optNum(b.sector), region = optNum(b.region);
+  if (fullName.length < 2 || fullName.length > 100) return { error: 'Аты-жөніңізді толық жазыңыз.' };
+  if (!ROLES.includes(role)) return { error: 'Кім екеніңізді таңдаңыз.' };
+  // Жұмыс беруші мен оқу орны үшін ұйым міндетті
+  if (role !== 'student' && (orgName.length < 2 || orgName.length > 200)) return { error: 'Ұйым атауын жазыңыз (2–200 таңба).' };
+  if (sector !== null && !isIdx(sector, nS)) return { error: 'Сала дұрыс емес.' };
+  if (region !== null && !isIdx(region, nR)) return { error: 'Өңір дұрыс емес.' };
+  return { fullName, role, orgName, sector, region };
+}
+
+const strongPassword = p => p.length >= 8 && /\d/.test(p) && /[a-zA-Zа-яА-ЯәіңғүұқөһӘІҢҒҮҰҚӨҺ]/.test(p);
+
+// Пайдаланушы (және қажет болса ұйым) бір транзакцияда жасалады
+async function createUser(db, p) {
+  return inTx(db, async tx => {
+    let orgId = null;
+    if (p.role !== 'student') {
+      orgId = Number((await new sql.Request(tx)
+        .input('name', sql.NVarChar(200), p.orgName).input('type', sql.VarChar(20), p.role)
+        .input('sector', sql.TinyInt, p.sector).input('region', sql.TinyInt, p.region)
+        .query(`INSERT INTO dbo.Organizations (Name, Type, Sector, Region) OUTPUT INSERTED.Id
+                VALUES (@name, @type, @sector, @region)`)).recordset[0].Id);
+    }
+    const { recordset } = await new sql.Request(tx)
+      .input('fullName', sql.NVarChar(100), p.fullName)
+      .input('phone', sql.VarChar(20), p.phone || null)
+      .input('email', sql.NVarChar(254), p.email || null)
+      .input('googleId', sql.VarChar(64), p.googleId || null)
+      .input('hash', sql.VarChar(100), p.hash || null)
+      .input('role', sql.VarChar(20), p.role)
+      .input('org', sql.Int, orgId)
+      .query(`INSERT INTO dbo.Users (FullName, Phone, Email, GoogleId, PasswordHash, Role, OrganizationId, LastLoginAt)
+              OUTPUT INSERTED.Id VALUES (@fullName, @phone, @email, @googleId, @hash, @role, @org, SYSUTCDATETIME())`);
+    return Number(recordset[0].Id);
+  });
+}
+
+async function userById(db, id) {
+  const { recordset } = await db.request().input('id', sql.Int, id).query(`${USER_SQL} WHERE u.Id = @id`);
+  return recordset[0];
+}
+
+async function signIn(res, db, user, remember) {
+  await db.request().input('id', sql.Int, user.Id)
+    .query('UPDATE dbo.Users SET LastLoginAt = SYSUTCDATETIME() WHERE Id = @id');
+  await createSession(res, user.Id, remember);
+}
+
+// --- API: авторизация ---
+app.get('/api/auth/config', (req, res) => res.json({ ok: true, googleClientId: GOOGLE_CLIENT_ID || null }));
+
+// 1-қадам: нөмір тіркелген бе — кіру не тіркелу формасын көрсету үшін
+app.post('/api/auth/phone/check', async (req, res, next) => {
+  try {
+    if (checkLimit.blocked(req.ip)) return fail(res, 429, 'Әрекет тым көп. 15 минуттан кейін қайталаңыз.');
+    checkLimit.hit(req.ip);
+    const phone = normPhone(req.body.phone);
+    if (!phone) return fail(res, 400, 'Телефон нөмірі дұрыс емес. Мысалы: +7 701 234 56 78');
+    const db = await getPool();
+    const { recordset } = await db.request().input('phone', sql.VarChar(20), phone)
+      .query('SELECT 1 FROM dbo.Users WHERE Phone = @phone');
+    res.json({ ok: true, phone, exists: recordset.length > 0 });
+  } catch (err) { next(err); }
+});
+
 app.post('/api/auth/register', async (req, res, next) => {
   try {
-    const fullName = String(req.body.fullName || '').trim();
-    const email = String(req.body.email || '').trim().toLowerCase();
+    const phone = normPhone(req.body.phone);
     const password = String(req.body.password || '');
-    const role = String(req.body.role || '');
-
-    if (fullName.length < 2 || fullName.length > 100) return fail(res, 400, 'Аты-жөніңізді толық жазыңыз.');
-    if (!EMAIL_RE.test(email) || email.length > 254) return fail(res, 400, 'Электрондық пошта дұрыс емес.');
-    if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Zа-яА-ЯәіңғүұқөһӘІҢҒҮҰҚӨҺ]/.test(password))
-      return fail(res, 400, 'Құпиясөз кемінде 8 таңбадан тұрып, әріп пен сан қамтуы керек.');
-    if (!ROLES.includes(role)) return fail(res, 400, 'Кім екеніңізді таңдаңыз.');
-    // Жұмыс беруші мен оқу орны үшін ұйым міндетті
-    const hasOrg = role !== 'student';
-    const orgName = String(req.body.orgName || '').trim();
-    const sector = optNum(req.body.sector), region = optNum(req.body.region);
-    if (hasOrg && (orgName.length < 2 || orgName.length > 200))
-      return fail(res, 400, 'Ұйым атауын жазыңыз (2–200 таңба).');
-    if (sector !== null && !isIdx(sector, nS)) return fail(res, 400, 'Сала дұрыс емес.');
-    if (region !== null && !isIdx(region, nR)) return fail(res, 400, 'Өңір дұрыс емес.');
+    if (!phone) return fail(res, 400, 'Телефон нөмірі дұрыс емес.');
+    const p = parseProfile(req.body);
+    if (p.error) return fail(res, 400, p.error);
+    if (!strongPassword(password)) return fail(res, 400, 'Құпиясөз кемінде 8 таңбадан тұрып, әріп пен сан қамтуы керек.');
 
     const db = await getPool();
-    const exists = await db.request().input('email', sql.NVarChar(254), email)
-      .query('SELECT 1 FROM dbo.Users WHERE Email = @email');
-    if (exists.recordset.length) return fail(res, 409, 'Бұл пошта бұрын тіркелген. Кіру бетін қолданыңыз.');
+    const exists = await db.request().input('phone', sql.VarChar(20), phone)
+      .query('SELECT 1 FROM dbo.Users WHERE Phone = @phone');
+    if (exists.recordset.length) return fail(res, 409, 'Бұл нөмір бұрын тіркелген. Құпиясөзбен кіріңіз.');
 
-    const hash = await bcrypt.hash(password, 10);
-    const userId = await inTx(db, async tx => {
-      let orgId = null;
-      if (hasOrg) {
-        orgId = Number((await new sql.Request(tx)
-          .input('name', sql.NVarChar(200), orgName).input('type', sql.VarChar(20), role)
-          .input('sector', sql.TinyInt, sector).input('region', sql.TinyInt, region)
-          .query(`INSERT INTO dbo.Organizations (Name, Type, Sector, Region) OUTPUT INSERTED.Id
-                  VALUES (@name, @type, @sector, @region)`)).recordset[0].Id);
-      }
-      const { recordset } = await new sql.Request(tx)
-        .input('fullName', sql.NVarChar(100), fullName)
-        .input('email', sql.NVarChar(254), email)
-        .input('hash', sql.VarChar(100), hash)
-        .input('role', sql.VarChar(20), role)
-        .input('org', sql.Int, orgId)
-        .query(`INSERT INTO dbo.Users (FullName, Email, PasswordHash, Role, OrganizationId, LastLoginAt)
-                OUTPUT INSERTED.Id VALUES (@fullName, @email, @hash, @role, @org, SYSUTCDATETIME())`);
-      return Number(recordset[0].Id);
-    });
-    const { recordset } = await db.request().input('id', sql.Int, userId).query(`${USER_SQL} WHERE u.Id = @id`);
+    const userId = await createUser(db, { ...p, phone, hash: await bcrypt.hash(password, 10) });
     await createSession(res, userId, true);
-    res.status(201).json({ ok: true, user: publicUser(recordset[0]) });
+    res.status(201).json({ ok: true, user: publicUser(await userById(db, userId)) });
   } catch (err) { next(err); }
 });
 
 app.post('/api/auth/login', async (req, res, next) => {
   try {
-    if (tooManyAttempts(req.ip)) return fail(res, 429, 'Әрекет тым көп. 15 минуттан кейін қайталаңыз.');
-    const email = String(req.body.email || '').trim().toLowerCase();
+    if (loginLimit.blocked(req.ip)) return fail(res, 429, 'Әрекет тым көп. 15 минуттан кейін қайталаңыз.');
+    const phone = normPhone(req.body.phone);
     const password = String(req.body.password || '');
 
     const db = await getPool();
-    const { recordset } = await db.request().input('email', sql.NVarChar(254), email)
-      .query(`${USER_SQL} WHERE u.Email = @email`);
+    const { recordset } = await db.request().input('phone', sql.VarChar(20), phone || '')
+      .query(`${USER_SQL} WHERE u.Phone = @phone`);
     const user = recordset[0];
-    // Пошта табылмаса да bcrypt жұмыс істейді — жауап уақыты бойынша пошта бар-жоғын білу мүмкін болмасын
-    const ok = await bcrypt.compare(password, user ? user.PasswordHash : DUMMY_HASH);
-    if (!user || !ok) {
-      recordFailure(req.ip);
-      return fail(res, 401, 'Пошта немесе құпиясөз қате.');
+    // Нөмір табылмаса да bcrypt жұмыс істейді — жауап уақыты бойынша нөмір бар-жоғын білу мүмкін болмасын
+    const ok = await bcrypt.compare(password, (user && user.PasswordHash) || DUMMY_HASH);
+    if (!user || !user.PasswordHash || !ok) {
+      loginLimit.hit(req.ip);
+      return fail(res, 401, 'Нөмір немесе құпиясөз қате.');
     }
-    await db.request().input('id', sql.Int, user.Id)
-      .query('UPDATE dbo.Users SET LastLoginAt = SYSUTCDATETIME() WHERE Id = @id');
-    await createSession(res, user.Id, Boolean(req.body.remember));
+    await signIn(res, db, user, Boolean(req.body.remember));
     res.json({ ok: true, user: publicUser(user) });
+  } catch (err) { next(err); }
+});
+
+// Google: ID token тексеріледі. Пайдаланушы бар болса — кіреді, жоқ болса профиль толтыруға уақытша белгі беріледі.
+const pendingGoogle = new Map();   // белгі → { sub, email, name, exp }
+
+app.post('/api/auth/google', async (req, res, next) => {
+  try {
+    if (!googleClient) return fail(res, 503, 'Google арқылы кіру бапталмаған (GOOGLE_CLIENT_ID).');
+    let payload;
+    try {
+      const ticket = await googleClient.verifyIdToken({ idToken: String(req.body.credential || ''), audience: GOOGLE_CLIENT_ID });
+      payload = ticket.getPayload();
+    } catch { return fail(res, 401, 'Google растауы сәтсіз аяқталды. Қайталап көріңіз.'); }
+    if (!payload.email_verified) return fail(res, 401, 'Google поштасы расталмаған.');
+    const email = payload.email.toLowerCase();
+
+    const db = await getPool();
+    const { recordset } = await db.request()
+      .input('sub', sql.VarChar(64), payload.sub).input('email', sql.NVarChar(254), email)
+      .query(`${USER_SQL} WHERE u.GoogleId = @sub OR u.Email = @email`);
+    const user = recordset.find(u => u.GoogleId === payload.sub) || recordset[0];
+    if (user) {
+      if (!user.GoogleId) {
+        await db.request().input('id', sql.Int, user.Id).input('sub', sql.VarChar(64), payload.sub)
+          .query('UPDATE dbo.Users SET GoogleId = @sub WHERE Id = @id');
+      }
+      await signIn(res, db, user, true);
+      return res.json({ ok: true, user: publicUser(user) });
+    }
+    const pending = crypto.randomBytes(24).toString('hex');
+    for (const [k, v] of pendingGoogle) if (v.exp < Date.now()) pendingGoogle.delete(k);
+    pendingGoogle.set(pending, { sub: payload.sub, email, name: payload.name || '', exp: Date.now() + 15 * 60 * 1000 });
+    res.json({ ok: true, needProfile: true, pending, fullName: payload.name || '', email });
+  } catch (err) { next(err); }
+});
+
+app.post('/api/auth/google/complete', async (req, res, next) => {
+  try {
+    const key = String(req.body.pending || '');
+    const g = pendingGoogle.get(key);
+    if (!g || g.exp < Date.now()) return fail(res, 401, 'Google сеансының мерзімі өтті. Қайта кіріңіз.');
+    const p = parseProfile({ ...req.body, fullName: req.body.fullName || g.name });
+    if (p.error) return fail(res, 400, p.error);
+    const db = await getPool();
+    const userId = await createUser(db, { ...p, email: g.email, googleId: g.sub });
+    pendingGoogle.delete(key);
+    await createSession(res, userId, true);
+    res.status(201).json({ ok: true, user: publicUser(await userById(db, userId)) });
   } catch (err) { next(err); }
 });
 

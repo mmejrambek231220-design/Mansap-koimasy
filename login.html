@@ -4,18 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Кіру — Мансап Компасы</title>
-  <meta name="description" content="Машиналық оқыту әдістерімен еңбек нарығындағы кәсіби дағдыларға сұранысты болжайтын платформа.">
+  <meta name="description" content="Мансап Компасына телефон нөмірі немесе Google арқылы кіру.">
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/mk-menu.css">
   <link rel="stylesheet" href="css/auth.css">
 </head>
 <body data-page="auth">
 
-<!-- Компас белгісі: бүкіл бетте <use href="#compass"> арқылы қолданылады -->
+<!-- Компас белгісі -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="0">
@@ -37,185 +36,84 @@
   </defs>
 </svg>
 
-<header class="site-header">
-  <nav class="nav container-wide" aria-label="Негізгі мәзір">
-    <a class="logo" href="index.html" aria-label="Мансап Компасы — басты бет">
-      <svg class="logo__icon"><use href="#compass"/></svg>
-      <span class="logo__text">Мансап <b>Компасы</b></span>
-    </a>
-
-    <ul class="menu" id="menu">
-      <li class="menu__item">
-        <button class="menu__link" aria-haspopup="true">Деректер <span class="chev">⌄</span></button>
-        <ul class="dropdown">
-          <li><a href="vacancies.html">Вакансиялар</a></li>
-          <li><a href="skills.html">Дағдылар</a></li>
-          <li><a href="professions.html">Мамандықтар</a></li>
-          <li><a href="#">Жалақы</a></li>
-          <li><a href="#">Өңірлер</a></li>
-        </ul>
-      </li>
-      <li class="menu__item">
-        <button class="menu__link" aria-haspopup="true">Болжамдар <span class="chev">⌄</span></button>
-        <ul class="dropdown">
-          <li><a href="forecast.html">Дағдылар болжамы</a></li>
-          <li><a href="professions.html">Мамандық бойынша болжам</a></li>
-          <li><a href="#">Олқылық талдауы</a></li>
-          <li><a href="#">Мансап кеңесшісі</a></li>
-        </ul>
-      </li>
-      <li class="menu__item">
-        <button class="menu__link" aria-haspopup="true">Кімге арналған <span class="chev">⌄</span></button>
-        <ul class="dropdown">
-          <li><a href="index.html#students">Студенттер</a></li>
-          <li><a href="index.html#employers">Жұмыс берушілер</a></li>
-          <li><a href="index.html#universities">Оқу орындары</a></li>
-        </ul>
-      </li>
-      <li class="menu__item">
-        <button class="menu__link" aria-haspopup="true">Ресурстар <span class="chev">⌄</span></button>
-        <ul class="dropdown">
-          <li><a href="index.html#research">Зерттеулер</a></li>
-          <li><a href="model.html">Әдістеме</a></li>
-          <li><a href="#">Блог</a></li>
-        </ul>
-      </li>
-      <li class="menu__item">
-        <button class="menu__link" aria-haspopup="true">Жоба туралы <span class="chev">⌄</span></button>
-        <ul class="dropdown">
-          <li><a href="#">Біз туралы</a></li>
-          <li><a href="#">Байланыс</a></li>
-        </ul>
-      </li>
-      <li class="menu__mobile-cta"><a class="btn btn--pink" href="#">Дағдымды тексеру <span>→</span></a></li>
-    </ul>
-
-    <div class="nav__right">
-      <a class="nav__signin" href="login.html">Кіру</a>
-      <a class="btn btn--pink btn--sm" href="#">Дағдымды тексеру <span>→</span></a>
-      <button class="burger" id="burger" aria-label="Мәзірді ашу" aria-expanded="false" aria-controls="menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-</header>
-
 <main class="auth">
-  <section class="auth__form-side">
-    <div class="auth__box">
-      <p class="fc-hero__crumbs auth__crumbs"><a href="index.html">Басты бет</a> / Кіру</p>
-      <h1 class="auth__title"><span class="grad-text" id="authHeading">Қош келдіңіз</span></h1>
-      <p class="auth__lead" id="authLead">Болжамдарды сақтау және жеке ұсыныстар алу үшін аккаунтыңызға кіріңіз.</p>
+  <div class="auth__frame">
+    <p class="auth__where">Сіз <a href="index.html"><svg><use href="#compass"/></svg>Мансап Компасы</a> сайтына кіресіз</p>
 
-      <div class="auth__tabs" role="tablist">
-        <button type="button" role="tab" class="auth__tab is-active" data-mode="login" aria-selected="true">Кіру</button>
-        <button type="button" role="tab" class="auth__tab" data-mode="register" aria-selected="false">Тіркелу</button>
-        <span class="auth__tab-ink" aria-hidden="true"></span>
-      </div>
+    <div class="auth__card">
+      <!-- 1. Телефон нөмірі немесе Google -->
+      <section class="auth__step" data-step="phone">
+        <h1>Кіру немесе тіркелу</h1>
+        <form id="phoneForm" novalidate>
+          <label class="field"><span>Телефон нөмірі</span>
+            <span class="field__phone">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>
+              <em>+7</em>
+              <input type="tel" name="phone" inputmode="numeric" autocomplete="tel-national" placeholder="700 000 00 00" maxlength="13" required>
+            </span>
+          </label>
+          <p class="auth__msg" role="alert" hidden></p>
+          <button type="submit" class="auth__btn">Жалғастыру</button>
+        </form>
+        <div class="auth__or"><span>немесе</span></div>
+        <div class="auth__google" id="googleSlot">
+          <button type="button" class="auth__alt" id="googleFallback">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+            Google арқылы жалғастыру
+          </button>
+        </div>
+        <p class="auth__msg" id="googleMsg" role="alert" hidden></p>
+      </section>
 
-      <!-- Кіру -->
-      <form class="auth__form" id="loginForm" novalidate>
-        <label class="field"><span>Электрондық пошта</span>
-          <input type="email" name="email" autocomplete="email" placeholder="name@example.com" required></label>
-        <label class="field"><span>Құпиясөз</span>
-          <span class="field__pw"><input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
-            <button type="button" class="field__eye" aria-label="Құпиясөзді көрсету">Көрсету</button></span></label>
-        <div class="auth__row">
+      <!-- 2а. Тіркелген нөмір: құпиясөз -->
+      <section class="auth__step" data-step="password" hidden>
+        <button type="button" class="auth__back" data-back>← <span class="auth__phone-label"></span> · өзгерту</button>
+        <h1>Құпиясөзді енгізіңіз</h1>
+        <form id="loginForm" novalidate>
+          <label class="field"><span>Құпиясөз</span>
+            <span class="field__pw"><input type="password" name="password" autocomplete="current-password" required>
+              <button type="button" class="field__eye" aria-label="Құпиясөзді көрсету">Көрсету</button></span></label>
           <label class="check"><input type="checkbox" name="remember" checked><i></i>Мені есте сақта</label>
-          <a href="#" class="auth__link" id="forgotLink">Құпиясөзді ұмыттыңыз ба?</a>
-        </div>
-        <p class="auth__msg" role="alert" hidden></p>
-        <button type="submit" class="btn btn--dark auth__submit">Кіру <span>→</span></button>
-      </form>
+          <p class="auth__msg" role="alert" hidden></p>
+          <button type="submit" class="auth__btn">Кіру</button>
+        </form>
+      </section>
 
-      <!-- Тіркелу -->
-      <form class="auth__form" id="registerForm" novalidate hidden>
-        <label class="field"><span>Аты-жөні</span>
-          <input type="text" name="fullName" autocomplete="name" placeholder="Мысалы: Айгерім Сейітова" required></label>
-        <label class="field"><span>Электрондық пошта</span>
-          <input type="email" name="email" autocomplete="email" placeholder="name@example.com" required></label>
-        <label class="field"><span>Құпиясөз</span>
-          <span class="field__pw"><input type="password" name="password" autocomplete="new-password" placeholder="Кемінде 8 таңба, әріп және сан" required>
-            <button type="button" class="field__eye" aria-label="Құпиясөзді көрсету">Көрсету</button></span>
-          <span class="pw-meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span></label>
-        <fieldset class="roles">
-          <legend>Мен —</legend>
-          <label class="role"><input type="radio" name="role" value="student" checked><span><b>Студентпін</b><small>Мамандыққа дайындығыңызды бағалап, үйренетін дағдыларды біліңіз</small></span></label>
-          <label class="role"><input type="radio" name="role" value="employer"><span><b>Жұмыс берушімін</b><small>Кадр қажеттілігі туралы анкета толтырып, болжамға үлес қосыңыз</small></span></label>
-          <label class="role"><input type="radio" name="role" value="education"><span><b>Оқу орнынанмын</b><small>Бағдарламаңызды нарыққа сәйкестігін тексеріңіз</small></span></label>
-        </fieldset>
-        <!-- Ұйым деректері: тек жұмыс беруші мен оқу орны үшін -->
-        <div class="org-fields" id="orgFields" hidden>
-          <p class="org-fields__hint" id="orgHint"></p>
-          <label class="field"><span>Ұйым атауы</span>
-            <input type="text" name="orgName" autocomplete="organization" maxlength="200" placeholder="Мысалы: «Дала Логистик» ЖШС"></label>
-          <div class="org-fields__row">
-            <label class="field" id="orgSectorField"><span>Сала</span>
-              <select name="sector"></select></label>
-            <label class="field"><span>Өңір</span>
-              <select name="region"></select></label>
+      <!-- 2ә. Жаңа нөмір немесе Google: тіркелу -->
+      <section class="auth__step" data-step="register" hidden>
+        <button type="button" class="auth__back" data-back>← Артқа</button>
+        <h1>Аккаунт жасау</h1>
+        <p class="auth__sub" id="regFor"></p>
+        <form id="registerForm" novalidate>
+          <label class="field"><span>Аты-жөні</span>
+            <input type="text" name="fullName" autocomplete="name" placeholder="Айгерім Сейітова" required></label>
+          <fieldset class="roles">
+            <legend>Мен —</legend>
+            <label class="role"><input type="radio" name="role" value="student" checked><span>Студент</span></label>
+            <label class="role"><input type="radio" name="role" value="employer"><span>Жұмыс беруші</span></label>
+            <label class="role"><input type="radio" name="role" value="education"><span>Оқу орны</span></label>
+          </fieldset>
+          <div class="org" hidden>
+            <label class="field"><span id="orgLabel">Ұйым атауы</span>
+              <input type="text" name="orgName" autocomplete="organization" placeholder="Мысалы: «Алатау Тех» ЖШС"></label>
+            <div class="org__row">
+              <label class="field" data-only="employer"><span>Сала</span><select name="sector"><option value="">Таңдаңыз</option></select></label>
+              <label class="field"><span>Өңір</span><select name="region"><option value="">Таңдаңыз</option></select></label>
+            </div>
           </div>
-        </div>
-        <p class="auth__msg" role="alert" hidden></p>
-        <button type="submit" class="btn btn--dark auth__submit">Аккаунт ашу <span>→</span></button>
-        <p class="auth__note">Тіркелу арқылы деректеріңіздің курстық жоба аясында сақталуына келісесіз. Құпиясөз шифрланған (bcrypt) түрде сақталады.</p>
-      </form>
-
-      <!-- Кірген соң -->
-      <div class="auth__done" id="authDone" hidden>
-        <div class="auth__avatar" id="doneAvatar"></div>
-        <h2 id="doneName"></h2>
-        <p id="doneMeta"></p>
-        <div class="auth__done-actions">
-          <a class="btn btn--dark" href="account.html">Жеке кабинет <span>→</span></a>
-          <button type="button" class="auth__link" id="logoutBtn">Шығу</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <aside class="auth__art" aria-hidden="true">
-    <div class="auth__grid"></div>
-    <div class="auth__art-inner">
-      <p class="eyebrow">Мансап Компасы</p>
-      <p class="auth__quote">Болашақ дағдыларды бүгін біліңіз.</p>
-      <ul class="auth__perks">
-        <li><b>47</b> дағды бойынша 2030 жылға дейінгі болжам</li>
-        <li><b>34</b> мамандық үшін жеке ұсыныстар</li>
-        <li><b>100k+</b> вакансия негізіндегі талдау</li>
-      </ul>
-    </div>
-    <img class="auth__photo" src="assets/img/menu-employer.webp" alt="">
-  </aside>
-</main>
-
-
-<footer class="footer">
-  <div class="container">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <a class="logo" href="index.html">
-          <svg class="logo__icon"><use href="#compass"/></svg>
-          <span class="logo__text">Мансап <b>Компасы</b></span>
-        </a>
-        <p>Еңбек нарығындағы дағдыларға<br>сұранысты болжау платформасы</p>
-      </div>
-      <div class="footer__cols">
-        <div><h5>Деректер</h5><a href="vacancies.html">Вакансиялар</a><a href="skills.html">Дағдылар</a><a href="professions.html">Мамандықтар</a><a href="#">Жалақы</a><a href="#">Өңірлер</a></div>
-        <div><h5>Болжамдар</h5><a href="forecast.html">Дағдылар болжамы</a><a href="#">Олқылық талдауы</a><a href="#">Мансап кеңесшісі</a></div>
-        <div><h5>Кімге</h5><a href="index.html#students">Студенттер</a><a href="index.html#employers">Жұмыс берушілер</a><a href="index.html#universities">Оқу орындары</a></div>
-        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="model.html">Әдістеме</a><a href="#">Байланыс</a></div>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© 2026 Мансап Компасы. Курстық жұмыс жобасы.</span>
-      <span><a href="#">Құпиялылық саясаты</a><a href="#">Пайдалану шарттары</a></span>
+          <label class="field" data-pw><span>Құпиясөз ойлап табыңыз</span>
+            <span class="field__pw"><input type="password" name="password" autocomplete="new-password" placeholder="Кемінде 8 таңба, әріп және сан">
+              <button type="button" class="field__eye" aria-label="Құпиясөзді көрсету">Көрсету</button></span>
+            <span class="pw-meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span></label>
+          <p class="auth__msg" role="alert" hidden></p>
+          <button type="submit" class="auth__btn">Тіркелу</button>
+        </form>
+      </section>
     </div>
   </div>
-</footer>
+  <p class="auth__below">Басты бетке <a href="index.html">оралу</a></p>
+</main>
 
-<script src="js/main.js"></script>
-<script src="js/mk-menu.js"></script>
 <script src="js/mk-auth.js"></script>
 <script src="js/auth.js"></script>
 </body>

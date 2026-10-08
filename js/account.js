@@ -199,7 +199,8 @@
     if (ORG && ORG.name) bits.push(`<span class="ac-hero__org">${esc(ORG.name)}</span>`);
     if (ORG && D.sectors[ORG.sector] != null) bits.push(`<span>${esc(D.sectors[ORG.sector])}</span>`);
     if (ORG && D.regions[ORG.region] != null) bits.push(`<span>${esc(D.regions[ORG.region])}</span>`);
-    bits.push(`<span class="ac-hero__mail">${esc(USER.email)}</span>`);
+    const contact = USER.phone ? `+7 ${USER.phone.slice(2).replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4')}` : USER.email;
+    if (contact) bits.push(`<span class="ac-hero__mail">${esc(contact)}</span>`);
     $('acMeta').innerHTML = bits.join('<i aria-hidden="true">·</i>');
     $('acLead').textContent = {
       employer: 'Алдағы 1–3 жылдағы кадр қажеттілігіңізді бөлісіңіз: қай мамандарды жалдайсыз, қай дағдыларға сұраныс артады. Сіздің жауаптарыңыз вакансиялар моделімен біріктіріліп, 2030 жылғы болжамды нақтылайды.',
