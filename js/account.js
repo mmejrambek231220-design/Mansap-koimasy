@@ -193,7 +193,7 @@
   function renderHero() {
     const first = USER.fullName.split(/\s+/)[0];
     ORG = USER.organization || null;
-    $('acAvatar').textContent = MKAuth.initials(USER.fullName);
+    $('acAvatar').innerHTML = MKAuth.roleIcon(USER.role);
     $('acTitle').innerHTML = `Сәлем, <span class="grad-text">${esc(first)}</span>!`;
     const bits = [`<span class="ac-badge ac-badge--${esc(USER.role)}">${esc(MKAuth.ROLE_NAMES[USER.role] || '')}</span>`];
     if (ORG && ORG.name) bits.push(`<span class="ac-hero__org">${esc(ORG.name)}</span>`);

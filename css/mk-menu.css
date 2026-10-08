@@ -106,5 +106,6 @@
 .nav__account { display: inline-flex; align-items: center; gap: 14px; }
 .nav__user { display: inline-flex; align-items: center; gap: 10px; color: var(--white); font-size: 14px; font-weight: 500; }
 .nav__avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--grad); font-size: 13px; font-weight: 700; }
+.nav__avatar svg { width: 17px; height: 17px; }
 .nav__logout { color: #BBB; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
 .nav__logout:hover { color: var(--white); }

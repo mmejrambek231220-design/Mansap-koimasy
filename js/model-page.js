@@ -1,5 +1,5 @@
 // ===== «Модель қалай жұмыс істейді» беті =====
-// Видео сияқты ойнайтын анимация (7 көрініс) + формулалардағы нақты сандар.
+// Видео сияқты ойнайтын анимация (7 көрініс): формулалар мен нақты сандар.
 // Барлық сан data/dataset.js деректерінен және MKModel-ден осы жерде есептеледі.
 
 (() => {
@@ -16,7 +16,6 @@
   const fc = MK.forecastSeries(series, YEAR);
   const m = fc.model;
   const gModel = fc.growthModel != null ? fc.growthModel : fc.growth;
-  const bt = MKModel.backtest(series);
 
   const all = MK.forecastSkills({}, YEAR, { backtest: true }).results;
   const top = all.slice(0, 6);
@@ -26,7 +25,7 @@
 
   // Сауалнама (data/surveys.js болса — нақты демо жауаптар, болмаса түсіндіру үшін мысал)
   const S = window.MK_SURVEYS;
-  const [up, same, down, hard] = S ? S.votes[K] : [62, 21, 7, 40];
+  const [up, same, down] = S ? S.votes[K] : [62, 21, 7];
   const nVotes = up + same + down;
   const balance = nVotes ? (up - down) / nVotes : 0;
   const G = 0.6, KW = 20, WMAX = 0.5;
@@ -37,23 +36,6 @@
 
   const NQ = MK.NQ, LASTQ = MK.LASTQ;
   const qYear = q => MK.Q0 + Math.floor(q / 4);
-
-  // ---------- Сандарды беттегі формулаларға қою ----------
-  const put = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-  put('exSkill', D.skills[K]);
-  put('exAlpha', m.alpha); put('exBeta', m.beta); put('exPhi', m.phi);
-  put('exSigma', m.sigma.toFixed(3));
-  put('exBase', fmt(fc.base)); put('exTarget', fmt(fc.target));
-  put('exLo', fmt(fc.lo)); put('exHi', fmt(fc.hi));
-  put('exGrowth', pct(gModel));
-  put('exVotes', `${up} / ${same} / ${down}`); put('exN', nVotes);
-  put('exBalance', balance.toFixed(2)); put('exGS', pct(gSurvey));
-  put('exW', w.toFixed(2)); put('exEns', pct(gEns));
-  put('exMape', (bt.mape * 100).toFixed(1) + '%'); put('exNaive', (bt.naiveMape * 100).toFixed(1) + '%');
-  put('exMeanMape', (meanMape * 100).toFixed(1) + '%'); put('exMeanNaive', (meanNaive * 100).toFixed(1) + '%');
-  put('exHorizon', fc.horizon);
-  put('exSurveyNote', S ? `${fmt(S.meta.employers)} жұмыс беруші мен ${fmt(S.meta.programs)} бағдарламаның ${S.meta.demo ? 'демо ' : ''}жауаптары` : 'мысал сандар (сауалнама деректері әлі қосылмаған)');
-  document.querySelectorAll('[data-total]').forEach(el => { el.textContent = fmt(D.v.length); });
 
   // ---------- SVG график көмекшілері ----------
   function chartPaths(W, H, pad, ser, f, hideLast = 0) {
@@ -255,7 +237,7 @@
             ${yearTicks(btP, W, H, P, NQ)}
             <g class="st-draw" style="--d:.6s;--dur:2.4s"><path d="${btP.actual}" class="st-actual"/></g>
             <g class="st-draw" style="--d:3.4s;--dur:1.6s"><path d="${btPredFull}" class="st-fc"/></g>
-            ${series.slice(-4).map((v, i) => `<circle class="a" style="--d:${5.4 + i * .3}s" cx="${btP.x(NQ - 4 + i)}" cy="${btP.y(v)}" r="6" fill="#F5C2EE"/>`).join('')}
+            ${series.slice(-4).map((v, i) => `<circle class="a" style="--d:${5.4 + i * .3}s" cx="${btP.x(NQ - 4 + i)}" cy="${btP.y(v)}" r="6" fill="#B46AE6"/>`).join('')}
           </svg>
           <div class="st-eqs">
             <div class="a" style="--d:6.6s"><small>Орташа абсолют пайыздық қате</small>${tex('\\text{MAPE} = \\frac{1}{h}\\sum_{i=1}^{h}\\left|\\frac{y_i - \\hat y_i}{y_i}\\right|')}</div>
@@ -362,11 +344,4 @@
   setPlaying(false);
   render();
 
-  // Беттегі формулалар (KaTeX auto-render)
-  if (window.renderMathInElement) {
-    renderMathInElement(document.querySelector('.md-formulas'), {
-      delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }],
-      throwOnError: false,
-    });
-  }
 })();

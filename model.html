@@ -100,160 +100,28 @@
       </button>
     </div>
   </nav>
-
-  <div class="announce">
-    <span>✦ Жаңа зерттеу: 2030 жылға дейін Қазақстанда сұранысқа ие болатын 20 дағды</span>
-    <a href="index.html#research">Есепті оқу <span>→</span></a>
-  </div>
 </header>
 
-<main>
-  <section class="md-hero">
-    <div class="container">
-      <p class="fc-hero__crumbs"><a href="index.html">Басты бет</a> / Болжамдар / Модель</p>
-      <h1>Болжам қалай <span class="grad-text">жасалады</span></h1>
-      <p class="md-hero__lead">Вакансиялардан бастап 2030 жылғы болжамға дейінгі бүкіл жол — 1,5 минуттық анимацияда. Барлық сан сайттағы нақты деректерден осы жерде есептеледі.</p>
-
-      <div class="player">
-        <div class="stage is-paused" id="stage">
-          <div class="st-scenes"></div>
-          <p class="st-sub" aria-live="polite"></p>
-          <div class="st-cover">
-            <button type="button" class="st-big" aria-label="Ойнату"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
-            <h3>Модель қалай жұмыс істейді</h3>
-            <p>7 көрініс · субтитрмен · бос орын пернесі — тоқтату</p>
-          </div>
-        </div>
-        <div class="pl-controls">
-          <button type="button" class="pl-play" id="plPlay" aria-label="Ойнату">
-            <svg class="i-play" viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg>
-            <svg class="i-pause" viewBox="0 0 24 24"><path d="M5 3h5v18H5zM14 3h5v18h-5z"/></svg>
-          </button>
-          <div class="pl-track"><div class="pl-chapters" id="plChapters"></div><div class="pl-bar"><i id="plBar"></i></div></div>
-          <span class="pl-time" id="plTime">0:00</span>
+<main class="md-main">
+  <section class="md-stage container">
+    <div class="player">
+      <div class="stage is-paused" id="stage">
+        <div class="st-scenes"></div>
+        <p class="st-sub" aria-live="polite"></p>
+        <div class="st-cover">
+          <button type="button" class="st-big" aria-label="Ойнату"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></button>
+          <h3>Модель қалай жұмыс істейді</h3>
+          <p>7 көрініс · субтитрмен · бос орын пернесі — тоқтату</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Кімге арналған -->
-  <section class="md-sec container">
-    <p class="eyebrow">Кімге арналған</p>
-    <h2>Әркім пайда алады, әркім үлес қосады</h2>
-    <p class="md-sec__lead">Мансап Компасы — екі жақты платформа: сайт болжам береді, ал жұмыс берушілер мен оқу орындары өз деректерімен болжамды дәлірек етеді.</p>
-    <div class="md-aud">
-      <article><img src="assets/img/menu-student.webp" alt="">
-        <div><h3>Студенттер</h3>
-          <ul><li>Мамандықтағы болашақ дағдылар тізімі</li><li>Дайындық пайызы: қай дағды жетіспейді</li><li>Тәжірибесіз вакансиялар</li></ul>
-          <p class="md-give"><b>Береді:</b> өз мақсаттары — қай мамандықтарға қызығушылық бар.</p></div></article>
-      <article><img src="assets/img/menu-employer.webp" alt="">
-        <div><h3>Жұмыс берушілер</h3>
-          <ul><li>Салада қай дағдыларға сұраныс өсуде</li><li>Басқа компаниялармен анонимді салыстыру</li><li>Жалақы деңгейі мен табу қиын мамандар</li></ul>
-          <p class="md-give"><b>Береді:</b> «Кадр қажеттілігі» анкетасы — жалдау жоспары және дағдыларды бағалау (артады / өзгермейді / азаяды).</p></div></article>
-      <article><img src="assets/img/menu-college.webp" alt="">
-        <div><h3>Оқу орындары</h3>
-          <ul><li>Бағдарламаның нарыққа сәйкестік пайызы</li><li>Нарық сұрайтын, бірақ оқытылмайтын дағдылар</li><li>Жаңа курстарға ұсыныс</li></ul>
-          <p class="md-give"><b>Береді:</b> түлектер саны 2026–2030, оқытылатын дағдылар, жұмысқа орналасу пайызы.</p></div></article>
-    </div>
-  </section>
-
-  <!-- Цикл -->
-  <section class="md-sec container">
-    <p class="eyebrow">Бүкіл процесс</p>
-    <h2>Деректерден болжамға дейін</h2>
-    <ol class="md-cycle">
-      <li><h3>Жинау</h3><p>hh.kz API, LinkedIn датасеті, Enbek.kz — <span data-total></span> вакансия SQLite базасында.</p></li>
-      <li><h3>Дағдыларды табу</h3><p>47 дағды сөздігі мен синонимдер бойынша вакансия мәтінінен дағдылар алынады.</p></li>
-      <li><h3>Болжау</h3><p>Әр дағдының тоқсандық қатарына Holt моделі үйретіледі, сауалнамамен біріктіріледі.</p></li>
-      <li><h3>Тексеру</h3><p>Соңғы 4 тоқсан жасырылып, болжам нақты мәнмен салыстырылады (MAPE).</p></li>
-    </ol>
-  </section>
-
-  <!-- Формулалар -->
-  <section class="md-sec container">
-    <p class="eyebrow">Әдістеме</p>
-    <h2>Болжам формулалары</h2>
-    <p class="md-sec__lead">Әр қадамның формуласы және оң жақта — «<b id="exSkill">Деректерді талдау</b>» дағдысы бойынша осы формулалардан шыққан нақты сандар.</p>
-
-    <div class="md-formulas">
-      <article class="fx"><span class="fx__n">01</span>
-        <div><h3>Дағдыға сұраныс (уақыт қатары)</h3>
-          <p>Әр тоқсан \(t\) үшін \(k\) дағдысы талап етілген вакансиялар саналады. \(V_t\) — тоқсандағы вакансиялар, \(S(v)\) — вакансия мәтінінен табылған дағдылар.</p>
-          $$y_{k,t} = \sum_{v \in V_t} \mathbf{1}\,[\,k \in S(v)\,]$$
-          <p>Модель өсуді пайызбен көруі және теріс мән бермеуі үшін қатар логарифмделеді:</p>
-          $$x_t = \ln(1 + y_t)$$</div>
-        <div class="fx__ex"><small>Мысал</small>Соңғы 12 айдағы сұраныс:<span class="big" id="exBase">—</span>вакансия</div>
-      </article>
-
-      <article class="fx"><span class="fx__n">02</span>
-        <div><h3>Holt моделі — сөнетін тренд (damped trend)</h3>
-          <p>Әр қадамда екі шама жаңартылады: <b>деңгей</b> \(\ell_t\) — сұраныстың қазіргі мәні, <b>тренд</b> \(b_t\) — оның өсу қарқыны. \(\phi\) трендті біртіндеп сөндіреді, сондықтан болжам шексіз өспейді.</p>
-          $$\ell_t = \alpha\,x_t + (1-\alpha)(\ell_{t-1} + \phi\,b_{t-1})$$
-          $$b_t = \beta(\ell_t - \ell_{t-1}) + (1-\beta)\,\phi\,b_{t-1}$$
-          $$\hat x_{t+h} = \ell_t + (\phi + \phi^2 + \dots + \phi^h)\,b_t, \qquad \hat y_{t+h} = e^{\hat x_{t+h}} - 1$$
-          <p class="fx__src">Gardner &amp; McKenzie (1985); Hyndman &amp; Athanasopoulos, <a href="https://otexts.com/fpp3/holt.html" target="_blank" rel="noopener">Forecasting: Principles and Practice</a>, 8.2 бөлім.</p></div>
-        <div class="fx__ex"><small>Таңдалған параметрлер</small>α = <b id="exAlpha"></b> · β = <b id="exBeta"></b> · φ = <b id="exPhi"></b><br>Болжам горизонты: <b id="exHorizon"></b> тоқсан</div>
-      </article>
-
-      <article class="fx"><span class="fx__n">03</span>
-        <div><h3>Параметрлерді таңдау (машиналық оқыту)</h3>
-          <p>α, β, φ мәндерін модель өзі «үйренеді»: 9 × 5 × 5 = 225 комбинацияның әрқайсысы тарихи деректе тексеріліп, бір қадамдық және 4 тоқсан алға болжау қателерінің қосындысы ең аз болатыны алынады.</p>
-          $$(\alpha, \beta, \phi) = \arg\min \Big[\sum_t (x_t - \hat x_{t|t-1})^2 + \sum_t (x_{t+4} - \hat x_{t+4|t})^2\Big]$$
-          <p>Екінші қосынды модельдің уақытша құлдырауға тым сенбеуі үшін қосылған — ұзақ мерзімді болжамға маңызды.</p></div>
-        <div class="fx__ex"><small>Қате (лог шкала)</small>σ = <b id="exSigma"></b></div>
-      </article>
-
-      <article class="fx"><span class="fx__n">04</span>
-        <div><h3>Өсу және 80% сенім аралығы</h3>
-          <p>Болжам жылындағы 4 тоқсанның қосындысы соңғы 4 нақты тоқсанмен салыстырылады. Интервал болжам алыстаған сайын кеңейеді:</p>
-          $$g_{\text{модель}} = \frac{\sum_{\text{болжам жылы}} \hat y}{\sum_{\text{соңғы 4 тоқсан}} y} - 1$$
-          $$\hat x_{t+h} \pm 1.28\,\sigma\sqrt{1 + (h-1)\,\alpha^2(1+\beta)^2}$$</div>
-        <div class="fx__ex"><small>2030 жыл</small>Болжам: <b id="exTarget"></b> (<span id="exLo"></span>–<span id="exHi"></span>)<span class="big" id="exGrowth">—</span>модель бойынша өсу</div>
-      </article>
-
-      <article class="fx"><span class="fx__n">05</span>
-        <div><h3>Жұмыс берушілер сауалнамасы — баланс</h3>
-          <p>Әр жұмыс беруші дағдыны бағалайды: артады (\(U\)), өзгермейді, азаяды (\(D\)). Еуропалық Комиссияның бизнес-сауалнамаларындағыдай «баланс» есептеледі және болжам мерзіміне \(T\) (жыл) сай өсуге айналдырылады. \(G = 0.6\): барлық жұмыс беруші «артады» десе, 4 жылда сұраныс ≈ +60% (жылына ≈ +12%) өседі:</p>
-          $$B_k = \frac{U_k - D_k}{N_k}, \qquad g_{\text{сауалнама}} = B_k \cdot G \cdot \frac{T}{4}, \quad T = \frac{h}{4}$$
-          <p class="fx__src">European Commission, <a href="https://economy-finance.ec.europa.eu/economic-forecast-and-surveys/business-and-consumer-surveys/overarching-methodological-concepts_en" target="_blank" rel="noopener">Business and Consumer Surveys</a> — balance statistic.</p></div>
-        <div class="fx__ex"><small>Жауаптар (артады / өзгермейді / азаяды)</small><b id="exVotes"></b>, N = <b id="exN"></b><br>B = <b id="exBalance"></b> → <b id="exGS"></b><br><small style="margin-top:8px" id="exSurveyNote"></small></div>
-      </article>
-
-      <article class="fx"><span class="fx__n">06</span>
-        <div><h3>Ансамбль: модель + сауалнама</h3>
-          <p>Екі болжам салмақталып біріктіріледі. Bates &amp; Granger (1969) көрсеткендей, болжамдарды біріктіру көбіне ең жақсы жеке болжамнан дәлірек. Жауап аз болса, сауалнамаға аз сенеміз (\(N &lt; 5\) болса \(w = 0\)):</p>
-          $$w = w_{\max}\cdot\frac{N}{N + K}, \quad w_{\max} = 0.5,\; K = 20$$
-          $$g = (1 - w)\,g_{\text{модель}} + w\,g_{\text{сауалнама}}$$
-          <p class="fx__src">Bates, J. M. &amp; Granger, C. W. J. (1969). The Combination of Forecasts. <i>Operational Research Quarterly</i>, 20(4).</p></div>
-        <div class="fx__ex"><small>Нәтиже</small>w = <b id="exW"></b><span class="big" id="exEns">—</span>соңғы болжам (ансамбль)</div>
-      </article>
-
-      <article class="fx"><span class="fx__n">07</span>
-        <div><h3>Мамандық бойынша болжам және тапшылық</h3>
-          <p>Мамандық \(p\) ішінде дағдының үлесі (вакансиялардың неше пайызы талап етеді) қазір және болжам жылында салыстырылады. Сұраныс оқу орындарының түлектерімен салыстырылып, тапшылық индексі шығады (Cedefop дағдылар болжамындағы сұраныс–ұсыныс тәсілі):</p>
-          $$s_{k,p} = \frac{y_{k,p}}{y_p}, \qquad \Delta s_{k,p} = \hat s_{k,p}^{\,2030} - s_{k,p}^{\,\text{қазір}}$$
-          $$R_p = \frac{\text{сұраныс}_p}{\text{түлектер}_p}$$
-          <p class="fx__src">Cedefop, <a href="https://www.cedefop.europa.eu/files/skills_forecast_methodological_framework.pdf" target="_blank" rel="noopener">Skills forecast methodological framework</a>.</p></div>
-        <div class="fx__ex"><small>Түсіндіру</small>\(R &gt; 1\) — маман <b>тапшы</b><br>\(R \approx 1\) — теңгерім<br>\(R &lt; 1\) — маман <b>артық</b></div>
-      </article>
-
-      <article class="fx"><span class="fx__n">08</span>
-        <div><h3>Дәлдікті тексеру (backtest)</h3>
-          <p>Соңғы \(h = 4\) тоқсан жасырылады, модель қалғанымен үйретіліп, жасырылған тоқсандарды болжайды. Қате қарапайым (naive) әдіспен — «соңғы мән қайталанады» — салыстырылады:</p>
-          $$\text{MAPE} = \frac{1}{h}\sum_{i=1}^{h}\left|\frac{y_i - \hat y_i}{y_i}\right| \times 100\%$$</div>
-        <div class="fx__ex"><small>Осы дағды</small>Модель: <b id="exMape"></b> · naive: <b id="exNaive"></b><br><small style="margin-top:8px">Барлық дағды бойынша орташа</small>Модель: <b id="exMeanMape"></b> · naive: <b id="exMeanNaive"></b></div>
-      </article>
-    </div>
-
-    <div class="md-refs">
-      <h3>Дереккөздер</h3>
-      <ol>
-        <li>Hyndman, R. J. &amp; Athanasopoulos, G. <a href="https://otexts.com/fpp3/" target="_blank" rel="noopener">Forecasting: Principles and Practice</a> (3rd ed.), OTexts.</li>
-        <li>Gardner, E. S. &amp; McKenzie, E. (1985). Forecasting trends in time series. <i>Management Science</i>, 31(10); <a href="https://www.bauer.uh.edu/gardner/docs/pdf/Why-the-damped-trend-works.pdf" target="_blank" rel="noopener">Why the damped trend works</a>.</li>
-        <li>Bates, J. M. &amp; Granger, C. W. J. (1969). The Combination of Forecasts. <i>Operational Research Quarterly</i>, 20(4), 451–468.</li>
-        <li>European Commission. <a href="https://economy-finance.ec.europa.eu/economic-forecast-and-surveys/business-and-consumer-surveys/overarching-methodological-concepts_en" target="_blank" rel="noopener">Business and Consumer Surveys: methodological concepts</a> (balance statistic).</li>
-        <li>Cedefop. <a href="https://www.cedefop.europa.eu/files/skills_forecast_methodological_framework.pdf" target="_blank" rel="noopener">Skills forecast: methodological framework</a>.</li>
-      </ol>
+      <div class="pl-controls">
+        <button type="button" class="pl-play" id="plPlay" aria-label="Ойнату">
+          <svg class="i-play" viewBox="0 0 24 24"><path d="M6 3l15 9-15 9z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24"><path d="M5 3h5v18H5zM14 3h5v18h-5z"/></svg>
+        </button>
+        <div class="pl-track"><div class="pl-chapters" id="plChapters"></div><div class="pl-bar"><i id="plBar"></i></div></div>
+        <span class="pl-time" id="plTime">0:00</span>
+      </div>
     </div>
   </section>
 </main>
@@ -292,7 +160,6 @@
 <script src="js/mk-core.js"></script>
 <script src="js/mk-ensemble.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 <script src="js/model-page.js"></script>
 </body>
 </html>

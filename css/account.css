@@ -366,3 +366,4 @@ span.ac-chip { cursor: default; }
 .ac-tag--plan { background: #F1E5FB; color: #6A2F99; grid-column: 1 / -1; justify-self: start; }
 .ac-card__head + .ac-field { margin-top: 24px; }
 .ac-hero--guest { padding-bottom: 72px; }
+.ac-hero__avatar svg { width: 46%; height: 46%; }
