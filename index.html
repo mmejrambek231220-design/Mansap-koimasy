@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="kk" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мансап Компасы — дағдыларға сұранысты болжау</title>
+  <meta name="description" content="Машиналық оқыту әдістерімен еңбек нарығындағы кәсіби дағдыларға сұранысты болжайтын платформа.">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Компас белгісі: бүкіл бетте <use href="#compass"> арқылы қолданылады -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#B46AE6"/>
+      <stop offset="1" stop-color="#E8506A"/>
+    </linearGradient>
+    <symbol id="compass" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="19" y="5" width="2" height="4" rx="1" fill="currentColor"/>
+      <rect x="31" y="19" width="4" height="2" rx="1" fill="currentColor"/>
+      <rect x="19" y="31" width="2" height="4" rx="1" fill="currentColor"/>
+      <rect x="5" y="19" width="4" height="2" rx="1" fill="currentColor"/>
+      <g transform="rotate(45 20 20)">
+        <path d="M20 8 L24.5 20 L15.5 20 Z" fill="url(#brandGrad)"/>
+        <path d="M15.5 20 L24.5 20 L20 32 Z" fill="currentColor"/>
+      </g>
+      <circle cx="20" cy="20" r="2.5" fill="#fff" stroke="#2A0D20"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <nav class="nav container-wide" aria-label="Негізгі мәзір">
+    <a class="logo" href="index.html" aria-label="Мансап Компасы — басты бет">
+      <svg class="logo__icon"><use href="#compass"/></svg>
+      <span class="logo__text">Мансап <b>Компасы</b></span>
+    </a>
+
+    <ul class="menu" id="menu">
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Деректер <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="vacancies.html">Вакансиялар</a></li>
+          <li><a href="skills.html">Дағдылар</a></li>
+          <li><a href="professions.html">Мамандықтар</a></li>
+          <li><a href="#">Жалақы</a></li>
+          <li><a href="#">Өңірлер</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Болжамдар <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="forecast.html">Дағдылар болжамы</a></li>
+          <li><a href="professions.html">Мамандық бойынша болжам</a></li>
+          <li><a href="#">Олқылық талдауы</a></li>
+          <li><a href="#">Мансап кеңесшісі</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Кімге арналған <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="#students">Студенттер</a></li>
+          <li><a href="#employers">Жұмыс берушілер</a></li>
+          <li><a href="#universities">Оқу орындары</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Ресурстар <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="#research">Зерттеулер</a></li>
+          <li><a href="#">Әдістеме</a></li>
+          <li><a href="#">Блог</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Жоба туралы <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="#">Біз туралы</a></li>
+          <li><a href="#">Байланыс</a></li>
+        </ul>
+      </li>
+      <li class="menu__mobile-cta"><a class="btn btn--pink" href="#">Дағдымды тексеру <span>→</span></a></li>
+    </ul>
+
+    <div class="nav__right">
+      <a class="nav__signin" href="#">Кіру</a>
+      <a class="btn btn--pink btn--sm" href="#">Дағдымды тексеру <span>→</span></a>
+      <button class="burger" id="burger" aria-label="Мәзірді ашу" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="announce">
+    <span>✦ Жаңа зерттеу: 2030 жылға дейін Қазақстанда сұранысқа ие болатын 20 дағды</span>
+    <a href="#research">Есепті оқу <span>→</span></a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero__copy">
+      <h1 class="hero__title">
+        <span class="grad-text">Дағдылар болжамы</span>
+        <span class="hero__rotate"><span id="typed">студенттер үшін</span><span class="caret" aria-hidden="true"></span></span>
+      </h1>
+      <p class="hero__lead">Машиналық оқыту әдістері еңбек нарығындағы вакансияларды талдап, болашақта қандай кәсіби дағдылар сұранысқа ие болатынын болжайды. Дұрыс мамандық таңда, қажеттісін уақытында үйрен.</p>
+      <a class="btn btn--dark" href="#">Болжамды көру <span>→</span></a>
+    </div>
+
+    <div class="container hero__cards">
+      <a class="hcard hcard--students" href="#students" aria-label="Студенттерге">
+        <img src="assets/img/student.jpg" alt="Дипломын ұстаған түлек қыз">
+        <div class="panel panel--profile" aria-hidden="true">
+          <div class="panel__head"><strong>Дағды профилі</strong><span class="panel__save">Сақтау</span></div>
+          <hr>
+          <label>Мамандық</label>
+          <div class="field">Деректер талдаушысы</div>
+          <div class="field">Машиналық оқыту инженері</div>
+          <hr>
+          <label>Болжам жылы</label>
+          <div class="field">2030</div>
+        </div>
+      </a>
+
+      <a class="hcard hcard--employers" href="#employers" aria-label="Жұмыс берушілерге">
+        <img src="assets/img/employer.jpg" alt="Ноутбукпен жұмыс істеп отырған маман">
+        <div class="panel panel--chart" aria-hidden="true">
+          <strong>Вакансиялар динамикасы</strong>
+          <hr>
+          <div class="chips"><span>Барлық вакансиялар ⌄</span><span>Жыл бойынша ⌄</span></div>
+          <div class="chart">
+            <svg viewBox="0 0 250 110" preserveAspectRatio="none">
+              <g stroke="#F0F0F0"><line x1="0" y1="10" x2="250" y2="10"/><line x1="0" y1="40" x2="250" y2="40"/><line x1="0" y1="70" x2="250" y2="70"/><line x1="0" y1="100" x2="250" y2="100"/></g>
+              <path d="M4 80 C30 60 50 30 80 28 C110 26 120 90 150 86 C180 82 200 30 246 24" fill="none" stroke="#3D5AFE" stroke-width="2"/>
+              <g fill="#3D5AFE"><circle cx="4" cy="80" r="3.5"/><circle cx="80" cy="28" r="3.5"/><circle cx="150" cy="86" r="3.5"/><circle cx="246" cy="24" r="3.5"/></g>
+            </svg>
+            <div class="tooltip"><b>● 2024</b><span>Өсім: +18,4%</span><span>Вакансия: 12 480</span></div>
+          </div>
+          <div class="years"><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+        </div>
+      </a>
+
+      <a class="hcard hcard--universities" href="#universities" aria-label="Оқу орындарына">
+        <img src="assets/img/builder.jpg" alt="Планшет ұстаған каскалы құрылысшы">
+        <div class="panel panel--snap" aria-hidden="true">
+          <div class="panel__head"><strong>Астана қ.</strong><span>×</span></div>
+          <span class="chip">Нарық шолуы ↗</span>
+          <strong class="panel__sub">Жұмыссыздық құрылымы</strong>
+          <div class="box">
+            <span>Жас тобы бойынша</span>
+            <div class="bars"><i style="--h:100"></i><i style="--h:36"></i><i style="--h:36"></i><i style="--h:114"></i><i style="--h:52"></i></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- AUDIENCES -->
+  <section class="section">
+    <div class="container grid-3">
+      <article class="acard reveal" id="students">
+        <span class="acard__icon"></span>
+        <h3>Студенттер</h3>
+        <p>Өзіңе сай мамандықты тап, болашақта қажет дағдыларды біл және мансап жолыңды жоспарла.</p>
+        <a class="link" href="#">Толығырақ <span>→</span></a>
+      </article>
+      <article class="acard reveal" id="employers">
+        <span class="acard__icon"></span>
+        <h3>Жұмыс берушілер</h3>
+        <p>Нарықтағы дағдылар трендін бақылап, болашақ қызметкерлерге қойылатын талаптарды алдын ала анықта.</p>
+        <a class="link" href="#">Толығырақ <span>→</span></a>
+      </article>
+      <article class="acard reveal" id="universities">
+        <span class="acard__icon"></span>
+        <h3>Оқу орындары</h3>
+        <p>Білім беру бағдарламаларын еңбек нарығының нақты сұранысына сәйкестендір.</p>
+        <a class="link" href="#">Толығырақ <span>→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="sources">
+    <div class="container">
+      <p class="eyebrow eyebrow--muted">Болжамдар ашық дерек көздеріне негізделген</p>
+      <ul class="sources__row">
+        <li>hh.kz</li><li>Enbek.kz</li><li>stat.gov.kz</li><li>WEF</li><li>LinkedIn</li><li>O*NET</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- DATA -->
+  <section class="data">
+    <div class="container data__inner">
+      <div class="data__stats">
+        <div><span class="stat" data-count="20">0</span><span class="mono">өңір</span></div>
+        <div><span class="stat" data-count="500" data-suffix="+">0</span><span class="mono">дағды талданады</span></div>
+      </div>
+      <img class="data__globe" src="assets/img/globe.jpg" alt="Жер шары">
+      <div class="data__copy">
+        <p class="eyebrow">Деректер</p>
+        <h2>Толық. Нақты. Пайдалы.</h2>
+        <p>Жүйе Қазақстанның 20 өңіріндегі вакансиялар мен ресми еңбек статистикасын үздіксіз талдайды.</p>
+        <p>Вакансия мәтіндерінен дағдылар NLP арқылы автоматты түрде алынады, ал уақыттық қатарлар модельдері (Prophet, LSTM, XGBoost) алдағы 1–5 жылға сұранысты болжайды.</p>
+        <a class="btn btn--pink" href="#">Деректерді зерттеу <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section section--center">
+    <div class="container">
+      <h2 class="h2">Әр пайдаланушыға лайықты шешім</h2>
+      <a class="btn btn--dark" href="#">Бастау <span>→</span></a>
+      <div class="grid-3 features">
+        <article class="fcard reveal">
+          <svg class="fcard__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+          <h3>Дағдылар болжамы</h3>
+          <p>Қай дағдыларға сұраныс өсетінін немесе азаятынын графиктер мен рейтинг арқылы көр.</p>
+        </article>
+        <article class="fcard reveal">
+          <svg class="fcard__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+          <h3>Олқылық талдауы</h3>
+          <p>Өз дағдыларыңды енгіз — жүйе оларды нарық талабымен салыстырып, нені үйрену керегін көрсетеді.</p>
+        </article>
+        <article class="fcard reveal">
+          <svg class="fcard__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
+          <h3>Мансап кеңесшісі</h3>
+          <p>Қызығушылығың мен дағдыларыңа сай перспективалы мамандықтар мен оқу жолдарын ұсынамыз.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH SLIDER -->
+  <section class="slider-section" id="research" aria-label="Зерттеулер">
+    <div class="container">
+      <div class="slider" id="slider" aria-roledescription="карусель">
+        <div class="slider__viewport">
+
+          <article class="slide is-active" data-theme="violet" aria-roledescription="слайд" aria-label="1 / 5">
+            <div class="slide__media">
+              <div class="slide__bg"></div>
+              <img class="slide__img" src="assets/img/ai-skills.jpg" alt="Табиғат аясында тұрған жас қыз — ескі теледидар кадры">
+            </div>
+            <div class="slide__body">
+              <p class="slide__tag"><i></i>AI дағдылары</p>
+              <h2 class="slide__title">Шуылдан тыс</h2>
+              <p class="slide__text">Жасанды интеллект жұмыс күшінің құнын анықтайтын ережелерді қайта жазып қойды. Корпоративтік оқытуды, студенттерді даярлауды немесе болашаққа бағытталған кадр стратегиясын жоспарласаңыз да, бұл зерттеу AI дағдыларын дамытуға нақты ұсыныстар береді және AI дағдыларының өзгеріс матрицасын таныстырады.</p>
+              <a class="btn btn--outline" href="#">Талдауды көру <span>→</span></a>
+            </div>
+          </article>
+
+          <article class="slide" data-theme="fire" aria-roledescription="слайд" aria-label="2 / 5">
+            <div class="slide__media">
+              <div class="slide__bg"></div>
+              <!-- CSS-пен жасалған анимациялық мұқаба -->
+              <div class="glitch-art" aria-hidden="true">
+                <span class="ga-strip ga-strip--1"></span>
+                <span class="ga-strip ga-strip--2"></span>
+                <span class="ga-strip ga-strip--3"></span>
+                <span class="ga-lines"></span>
+                <span class="ga-code">001 — 2030</span>
+                <div class="glitch" data-text="ТРЕНДТЕР">ТРЕНДТЕР</div>
+                <div class="glitch glitch--2" data-text="2030">2030</div>
+              </div>
+            </div>
+            <div class="slide__body">
+              <p class="slide__tag"><i></i>Еңбек нарығы</p>
+              <h2 class="slide__title">Трендтер 2030</h2>
+              <p class="slide__text">Жасанды интеллект, цифрландыру және жасыл экономика — Қазақстанның еңбек нарығын өзгертіп жатқан үш күш. Зерттеуде қай мамандықтар өседі, қайсысы автоматтандырылады және қандай дағдылар ең құнды болатыны талданады.</p>
+              <a class="btn btn--outline" href="#">Есепті оқу <span>→</span></a>
+            </div>
+          </article>
+
+          <article class="slide" data-theme="rose" aria-roledescription="слайд" aria-label="3 / 5">
+            <div class="slide__media">
+              <div class="slide__bg"></div>
+              <img class="slide__img" src="assets/img/story-1.jpg" alt="Демография туралы коллаж" loading="lazy">
+            </div>
+            <div class="slide__body">
+              <p class="slide__tag"><i></i>Демография</p>
+              <h2 class="slide__title">Ұрпақтар алмасуы</h2>
+              <p class="slide__text">Халықтың қартаюы мен жастар үлесінің өсуі еңбек нарығына қалай әсер етеді? Қай салаларда кадр тапшылығы күтілетінін және оның орнын қандай дағдылар толтыратынын талдадық.</p>
+              <a class="btn btn--outline" href="#">Толығырақ <span>→</span></a>
+            </div>
+          </article>
+
+          <article class="slide" data-theme="blue" aria-roledescription="слайд" aria-label="4 / 5">
+            <div class="slide__media">
+              <div class="slide__bg"></div>
+              <img class="slide__img" src="assets/img/story-2.jpg" alt="Метро перронында тұрған жас жігіт" loading="lazy">
+            </div>
+            <div class="slide__body">
+              <p class="slide__tag"><i></i>Жастар</p>
+              <h2 class="slide__title">Алғашқы жұмыс</h2>
+              <p class="slide__text">Түлектер алғашқы жұмысын қанша уақытта табады? Жұмыс берушілер жас мамандардан ең алдымен қандай дағдыларды күтеді және оқу бағдарламалары оған қаншалықты сай?</p>
+              <a class="btn btn--outline" href="#">Толығырақ <span>→</span></a>
+            </div>
+          </article>
+
+          <article class="slide" data-theme="green" aria-roledescription="слайд" aria-label="5 / 5">
+            <div class="slide__media">
+              <div class="slide__bg"></div>
+              <img class="slide__img" src="assets/img/story-3.jpg" alt="Жолдар мен қалалар коллажы" loading="lazy">
+            </div>
+            <div class="slide__body">
+              <p class="slide__tag"><i></i>Өңірлер</p>
+              <h2 class="slide__title">Көші-қон картасы</h2>
+              <p class="slide__text">Мамандар қай өңірлерге көшіп жатыр және неге? Өңірлер бойынша вакансиялар, жалақы және дағдыларға сұраныстың айырмашылығын интерактивті картадан көріңіз.</p>
+              <a class="btn btn--outline" href="#">Толығырақ <span>→</span></a>
+            </div>
+          </article>
+
+        </div>
+        <div class="slider__dots" id="sliderDots" role="tablist" aria-label="Слайдты таңдау"></div>
+      </div>
+
+      <div class="slider__nav">
+        <button class="slider__btn" id="sliderPrev"><span>←</span> Алдыңғы зерттеу</button>
+        <button class="slider__btn" id="sliderNext">Келесі зерттеу <span>→</span></button>
+        <div class="slider__progress" aria-hidden="true"><span id="sliderBar"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section--beige">
+    <div class="container grid-2">
+      <figure class="quote reveal">
+        <span class="quote__mark grad-text">“</span>
+        <blockquote>«Мансап Компасы маған қай бағдарламалау тілін үйрену керегін түсінуге көмектесті. Енді оқуымды нақты жоспарлай аламын.»</blockquote>
+        <figcaption>
+          <img src="assets/img/author-1.jpg" alt="" loading="lazy">
+          <span><b>Пайдаланушы аты</b><small>Студент, 3-курс</small></span>
+        </figcaption>
+      </figure>
+      <figure class="quote reveal">
+        <span class="quote__mark grad-text">“</span>
+        <blockquote>«Болжамдар арқылы біз келесі жылы қандай мамандарға сұраныс болатынын алдын ала жоспарлай аламыз.»</blockquote>
+        <figcaption>
+          <img src="assets/img/author-2.jpg" alt="" loading="lazy">
+          <span><b>Пайдаланушы аты</b><small>HR-маман, IT компания</small></span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>Болашағыңды бүгін бағдарла.</h2>
+      <p>Мансап Компасы — еңбек нарығының деректері мен машиналық оқыту әдістерін біріктіріп, дұрыс кәсіби шешім қабылдауға көмектесетін платформа.</p>
+      <a class="btn btn--dark" href="#">Бастау <span>→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="logo" href="index.html">
+          <svg class="logo__icon"><use href="#compass"/></svg>
+          <span class="logo__text">Мансап <b>Компасы</b></span>
+        </a>
+        <p>Еңбек нарығындағы дағдыларға<br>сұранысты болжау платформасы</p>
+      </div>
+      <div class="footer__cols">
+        <div><h5>Деректер</h5><a href="vacancies.html">Вакансиялар</a><a href="skills.html">Дағдылар</a><a href="professions.html">Мамандықтар</a><a href="#">Жалақы</a><a href="#">Өңірлер</a></div>
+        <div><h5>Болжамдар</h5><a href="forecast.html">Дағдылар болжамы</a><a href="#">Олқылық талдауы</a><a href="#">Мансап кеңесшісі</a></div>
+        <div><h5>Кімге</h5><a href="#students">Студенттер</a><a href="#employers">Жұмыс берушілер</a><a href="#universities">Оқу орындары</a></div>
+        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="#">Әдістеме</a><a href="#">Байланыс</a></div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Мансап Компасы. Курстық жұмыс жобасы.</span>
+      <span><a href="#">Құпиялылық саясаты</a><a href="#">Пайдалану шарттары</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
