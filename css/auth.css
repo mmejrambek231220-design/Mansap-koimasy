@@ -33,6 +33,13 @@
 .field input::placeholder { color: #AAA; }
 .field input:focus { outline: none; border-color: var(--violet); box-shadow: 0 0 0 4px rgba(180,106,230,.15); }
 .field input.is-invalid { border-color: var(--rose); }
+.field select {
+  appearance: none; width: 100%; font: inherit; font-size: 16px; color: var(--ink); cursor: pointer;
+  background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23777' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 15px center;
+  border: 1.5px solid #E4DEDA; border-radius: 12px; padding: 13px 40px 13px 15px; transition: border-color .2s, box-shadow .2s;
+}
+.field select:focus { outline: none; border-color: var(--violet); box-shadow: 0 0 0 4px rgba(180,106,230,.15); }
+.field[hidden] { display: none; }
 .field__pw { position: relative; display: block; }
 .field__pw input { padding-right: 96px; }
 .field__eye { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 6px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
@@ -104,3 +111,10 @@
 .auth__perks b { min-width: 64px; font-size: 22px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .auth__photo { position: relative; margin-top: auto; align-self: flex-end; width: 74%; max-width: 520px; mix-blend-mode: luminosity; filter: contrast(1.05); mask-image: linear-gradient(to top, #000 70%, transparent); }
 .auth__tabs[hidden] { display: none; }
+
+/* Ұйым өрістері (жұмыс беруші / оқу орны) */
+.org-fields { display: grid; gap: 14px; padding: 18px; border-radius: 14px; background: var(--beige); animation: auth-in .3s ease; }
+.org-fields[hidden] { display: none; }
+.org-fields__hint { font-size: 13px; line-height: 1.5; color: var(--text); }
+.org-fields__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 12px; }
+.org-fields__row:has(> .field[hidden]) { grid-template-columns: 1fr; }

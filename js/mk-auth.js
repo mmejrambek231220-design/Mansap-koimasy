@@ -27,7 +27,7 @@ const MKAuth = (() => {
     if (!slot || !user) return;
     const box = document.createElement('span');
     box.className = 'nav__account';
-    box.innerHTML = `<a class="nav__user" href="login.html" title="${ROLE_NAMES[user.role] || ''}">
+    box.innerHTML = `<a class="nav__user" href="account.html" title="Жеке кабинет · ${ROLE_NAMES[user.role] || ''}">
         <span class="nav__avatar">${initials(user.fullName)}</span><span class="nav__name"></span></a>
       <button type="button" class="nav__logout">Шығу</button>`;
     box.querySelector('.nav__name').textContent = user.fullName.split(/\s+/)[0];

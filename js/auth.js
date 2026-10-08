@@ -25,6 +25,32 @@
   tabs.forEach(t => t.addEventListener('click', () => setMode(t.dataset.mode)));
   if (location.hash === '#register') setMode('register');
 
+  // --- Ұйым өрістері (жұмыс беруші / оқу орны) ---
+  // Атаулар data/dataset.js-тегі ретпен сәйкес (индекс серверге жіберіледі)
+  const SECTORS = ['IT', 'Қаржы', 'Денсаулық сақтау', 'Білім', 'Өнеркәсіп', 'Сауда және логистика', 'Маркетинг', 'Энергетика'];
+  const REGIONS = ['Алматы', 'Астана', 'Шымкент', 'Қарағанды', 'Атырау', 'Ақтөбе', 'Павлодар', 'Өскемен'];
+  const ORG_HINT = {
+    employer: 'Ұйым атауы анкеталарыңызды топтау үшін қажет. Басқа пайдаланушыларға тек жинақталған, анонимді нәтиже көрсетіледі.',
+    education: 'Оқу орнының атауы бағдарламаларыңызды бір кабинетте сақтау үшін қажет.',
+  };
+  const R = forms.register.elements;
+  const fill = (select, names, placeholder) => {
+    select.innerHTML = `<option value="">${placeholder}</option>` + names.map((n, i) => `<option value="${i}">${n}</option>`).join('');
+  };
+  fill(R.sector, SECTORS, 'Саланы таңдаңыз');
+  fill(R.region, REGIONS, 'Өңірді таңдаңыз');
+
+  function syncRole() {
+    const role = R.role.value;
+    const org = role === 'employer' || role === 'education';
+    $('orgFields').hidden = !org;
+    $('orgSectorField').hidden = role !== 'employer';
+    R.orgName.required = org;
+    if (org) $('orgHint').textContent = ORG_HINT[role];
+  }
+  forms.register.querySelectorAll('input[name="role"]').forEach(r => r.addEventListener('change', syncRole));
+  syncRole();
+
   // --- Құпиясөзді көрсету ---
   document.querySelectorAll('.field__eye').forEach(btn => btn.addEventListener('click', () => {
     const input = btn.previousElementSibling;
@@ -71,7 +97,8 @@
     try {
       const res = await MKAuth.api(path, body);
       if (!res.ok) { message(form, res.message || 'Қате орын алды.'); return; }
-      showDone(res.user, path === 'register');
+      // Кірген соң — жеке кабинетке
+      location.href = 'account.html';
     } catch {
       message(form, 'Серверге қосылу мүмкін болмады. Сайтты `npm start` (server/) арқылы ашыңыз.');
     } finally {
@@ -87,7 +114,13 @@
   forms.register.addEventListener('submit', e => {
     e.preventDefault();
     const f = forms.register.elements;
-    submit(forms.register, 'register', { fullName: f.fullName.value, email: f.email.value, password: f.password.value, role: f.role.value });
+    const body = { fullName: f.fullName.value, email: f.email.value, password: f.password.value, role: f.role.value };
+    if (body.role !== 'student') {
+      body.orgName = f.orgName.value.trim();
+      if (f.region.value !== '') body.region = +f.region.value;
+      if (body.role === 'employer' && f.sector.value !== '') body.sector = +f.sector.value;
+    }
+    submit(forms.register, 'register', body);
   });
 
   $('forgotLink').addEventListener('click', e => {
@@ -100,10 +133,11 @@
     tabsBox.hidden = true;
     Object.values(forms).forEach(f => { f.hidden = true; });
     $('authHeading').textContent = isNew ? 'Аккаунт ашылды' : 'Сіз жүйедесіз';
-    $('authLead').textContent = 'Енді болжамдар мен ұсыныстар сіздің аккаунтыңызға байланысты.';
+    $('authLead').textContent = 'Анкеталар, бағдарламалар және жеке ұсыныстар жеке кабинетте.';
     $('doneAvatar').textContent = MKAuth.initials(user.fullName);
     $('doneName').textContent = user.fullName;
-    $('doneMeta').textContent = `${user.email} · ${MKAuth.ROLE_NAMES[user.role] || ''}`;
+    $('doneMeta').textContent = [user.email, MKAuth.ROLE_NAMES[user.role], user.organization && user.organization.name]
+      .filter(Boolean).join(' · ');
     $('authDone').hidden = false;
   }
 

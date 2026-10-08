@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Кіру — Мансап Компасы</title>
+  <title>Жеке кабинет — Мансап Компасы</title>
   <meta name="description" content="Машиналық оқыту әдістерімен еңбек нарығындағы кәсіби дағдыларға сұранысты болжайтын платформа.">
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,9 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/mk-menu.css">
-  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/account.css">
 </head>
-<body data-page="auth">
+<body data-page="account">
 
 <!-- Компас белгісі: бүкіл бетте <use href="#compass"> арқылы қолданылады -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -105,95 +105,39 @@
   </div>
 </header>
 
-<main class="auth">
-  <section class="auth__form-side">
-    <div class="auth__box">
-      <p class="fc-hero__crumbs auth__crumbs"><a href="index.html">Басты бет</a> / Кіру</p>
-      <h1 class="auth__title"><span class="grad-text" id="authHeading">Қош келдіңіз</span></h1>
-      <p class="auth__lead" id="authLead">Болжамдарды сақтау және жеке ұсыныстар алу үшін аккаунтыңызға кіріңіз.</p>
-
-      <div class="auth__tabs" role="tablist">
-        <button type="button" role="tab" class="auth__tab is-active" data-mode="login" aria-selected="true">Кіру</button>
-        <button type="button" role="tab" class="auth__tab" data-mode="register" aria-selected="false">Тіркелу</button>
-        <span class="auth__tab-ink" aria-hidden="true"></span>
-      </div>
-
-      <!-- Кіру -->
-      <form class="auth__form" id="loginForm" novalidate>
-        <label class="field"><span>Электрондық пошта</span>
-          <input type="email" name="email" autocomplete="email" placeholder="name@example.com" required></label>
-        <label class="field"><span>Құпиясөз</span>
-          <span class="field__pw"><input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
-            <button type="button" class="field__eye" aria-label="Құпиясөзді көрсету">Көрсету</button></span></label>
-        <div class="auth__row">
-          <label class="check"><input type="checkbox" name="remember" checked><i></i>Мені есте сақта</label>
-          <a href="#" class="auth__link" id="forgotLink">Құпиясөзді ұмыттыңыз ба?</a>
-        </div>
-        <p class="auth__msg" role="alert" hidden></p>
-        <button type="submit" class="btn btn--dark auth__submit">Кіру <span>→</span></button>
-      </form>
-
-      <!-- Тіркелу -->
-      <form class="auth__form" id="registerForm" novalidate hidden>
-        <label class="field"><span>Аты-жөні</span>
-          <input type="text" name="fullName" autocomplete="name" placeholder="Мысалы: Айгерім Сейітова" required></label>
-        <label class="field"><span>Электрондық пошта</span>
-          <input type="email" name="email" autocomplete="email" placeholder="name@example.com" required></label>
-        <label class="field"><span>Құпиясөз</span>
-          <span class="field__pw"><input type="password" name="password" autocomplete="new-password" placeholder="Кемінде 8 таңба, әріп және сан" required>
-            <button type="button" class="field__eye" aria-label="Құпиясөзді көрсету">Көрсету</button></span>
-          <span class="pw-meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span></label>
-        <fieldset class="roles">
-          <legend>Мен —</legend>
-          <label class="role"><input type="radio" name="role" value="student" checked><span><b>Студентпін</b><small>Мамандыққа дайындығыңызды бағалап, үйренетін дағдыларды біліңіз</small></span></label>
-          <label class="role"><input type="radio" name="role" value="employer"><span><b>Жұмыс берушімін</b><small>Кадр қажеттілігі туралы анкета толтырып, болжамға үлес қосыңыз</small></span></label>
-          <label class="role"><input type="radio" name="role" value="education"><span><b>Оқу орнынанмын</b><small>Бағдарламаңызды нарыққа сәйкестігін тексеріңіз</small></span></label>
-        </fieldset>
-        <!-- Ұйым деректері: тек жұмыс беруші мен оқу орны үшін -->
-        <div class="org-fields" id="orgFields" hidden>
-          <p class="org-fields__hint" id="orgHint"></p>
-          <label class="field"><span>Ұйым атауы</span>
-            <input type="text" name="orgName" autocomplete="organization" maxlength="200" placeholder="Мысалы: «Дала Логистик» ЖШС"></label>
-          <div class="org-fields__row">
-            <label class="field" id="orgSectorField"><span>Сала</span>
-              <select name="sector"></select></label>
-            <label class="field"><span>Өңір</span>
-              <select name="region"></select></label>
-          </div>
-        </div>
-        <p class="auth__msg" role="alert" hidden></p>
-        <button type="submit" class="btn btn--dark auth__submit">Аккаунт ашу <span>→</span></button>
-        <p class="auth__note">Тіркелу арқылы деректеріңіздің курстық жоба аясында сақталуына келісесіз. Құпиясөз шифрланған (bcrypt) түрде сақталады.</p>
-      </form>
-
-      <!-- Кірген соң -->
-      <div class="auth__done" id="authDone" hidden>
-        <div class="auth__avatar" id="doneAvatar"></div>
-        <h2 id="doneName"></h2>
-        <p id="doneMeta"></p>
-        <div class="auth__done-actions">
-          <a class="btn btn--dark" href="account.html">Жеке кабинет <span>→</span></a>
-          <button type="button" class="auth__link" id="logoutBtn">Шығу</button>
+<main class="ac">
+  <!-- Бет басы: сәлемдесу, ұйым, рөл -->
+  <section class="ac-hero">
+    <div class="ac-hero__grid" aria-hidden="true"></div>
+    <div class="container ac-hero__inner">
+      <p class="ac-hero__crumbs"><a href="index.html">Басты бет</a> / Жеке кабинет</p>
+      <div class="ac-hero__row">
+        <div class="ac-hero__avatar" id="acAvatar" aria-hidden="true"></div>
+        <div class="ac-hero__who">
+          <p class="eyebrow">Жеке кабинет</p>
+          <h1 id="acTitle">Жүктелуде…</h1>
+          <p class="ac-hero__meta" id="acMeta"></p>
         </div>
       </div>
+      <p class="ac-hero__lead" id="acLead"></p>
     </div>
   </section>
 
-  <aside class="auth__art" aria-hidden="true">
-    <div class="auth__grid"></div>
-    <div class="auth__art-inner">
-      <p class="eyebrow">Мансап Компасы</p>
-      <p class="auth__quote">Болашақ дағдыларды бүгін біліңіз.</p>
-      <ul class="auth__perks">
-        <li><b>47</b> дағды бойынша 2030 жылға дейінгі болжам</li>
-        <li><b>34</b> мамандық үшін жеке ұсыныстар</li>
-        <li><b>100k+</b> вакансия негізіндегі талдау</li>
-      </ul>
-    </div>
-    <img class="auth__photo" src="assets/img/menu-employer.webp" alt="">
-  </aside>
-</main>
+  <!-- Сіздің үлесіңіз -->
+  <section class="container ac-stats" id="acStats" aria-label="Сіздің үлесіңіз" hidden></section>
 
+  <!-- Рөлге сай мазмұн (js/account.js) -->
+  <section class="container ac-body" id="acBody" aria-live="polite"></section>
+
+  <!-- Деректер болжамға қалай әсер етеді -->
+  <section class="container ac-how" id="acHow" hidden>
+    <div class="ac-how__head">
+      <p class="eyebrow eyebrow--dark">Деректер қалай қолданылады</p>
+      <h2>Сіздің жауаптарыңыз вакансиялар моделімен біріктіріліп, 2030 жылғы болжамды нақтылайды</h2>
+    </div>
+    <ol class="ac-how__steps" id="acHowSteps"></ol>
+  </section>
+</main>
 
 <footer class="footer">
   <div class="container">
@@ -222,6 +166,7 @@
 <script src="js/main.js"></script>
 <script src="js/mk-menu.js"></script>
 <script src="js/mk-auth.js"></script>
-<script src="js/auth.js"></script>
+<script src="data/dataset.js"></script>
+<script src="js/account.js"></script>
 </body>
 </html>
