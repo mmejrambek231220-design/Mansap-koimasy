@@ -1,0 +1,122 @@
+{
+  "_comment": "Офлайн тексеруге арналған қолдан жазылған үлгі: hh.ru /vacancies тізімі (сұраныс бойынша) және /vacancies/{id} толық жауабы. Компаниялар мен сілтемелер ойдан шығарылған.",
+  "queries": {
+    "Python разработчик": {
+      "found": 3, "pages": 1, "page": 0, "per_page": 100,
+      "items": [
+        {
+          "id": "900000001", "name": "Python разработчик (Django)",
+          "area": { "id": "160", "name": "Алматы" },
+          "salary": { "from": 800000, "to": 1200000, "currency": "KZT", "gross": false },
+          "published_at": "2026-09-28T10:15:00+0500",
+          "employer": { "id": "1", "name": "Үлгі Софт" },
+          "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+          "snippet": { "requirement": "Опыт коммерческой разработки на <highlighttext>Python</highlighttext>, PostgreSQL, Docker. Английский язык — Intermediate.", "responsibility": "Разработка REST API на Django, работа в команде по Scrum." },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000001"
+        },
+        {
+          "id": "900000002", "name": "Senior Python Developer / ML",
+          "area": { "id": "159", "name": "Астана" },
+          "salary": { "from": 3000, "to": null, "currency": "USD", "gross": true },
+          "published_at": "2026-10-02T09:00:00+0500",
+          "employer": { "id": "2", "name": "Мысал Дата" },
+          "experience": { "id": "moreThan6", "name": "Более 6 лет" },
+          "snippet": { "requirement": "Machine learning, PyTorch, Kubernetes, AWS.", "responsibility": "Внедрение LLM-решений в продукт." },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000002"
+        },
+        {
+          "id": "900000003", "name": "Python-разработчик",
+          "area": { "id": "211", "name": "Костанай" },
+          "salary": null,
+          "published_at": "2026-09-30T12:00:00+0500",
+          "employer": { "id": "3", "name": "Өңір IT" },
+          "experience": { "id": "noExperience", "name": "Нет опыта" },
+          "snippet": { "requirement": "Знание Python.", "responsibility": null },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000003"
+        }
+      ]
+    },
+    "Бухгалтер": {
+      "found": 2, "pages": 1, "page": 0, "per_page": 100,
+      "items": [
+        {
+          "id": "900000010", "name": "Главный бухгалтер",
+          "area": { "id": "177", "name": "Караганда" },
+          "salary": { "from": 450000, "to": 550000, "currency": "KZT", "gross": false },
+          "published_at": "2026-08-20T08:30:00+0500",
+          "employer": { "id": "10", "name": "Сарыарқа Үлгі ЖШС" },
+          "experience": { "id": "between3And6", "name": "От 3 до 6 лет" },
+          "snippet": { "requirement": "Знание 1С:Бухгалтерия, МСФО, налоговой отчетности. Уверенный пользователь Excel.", "responsibility": "Ведение бухгалтерского учета, работа с первичной документацией." },
+          "professional_roles": [ { "id": "18", "name": "Бухгалтер" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000010"
+        },
+        {
+          "id": "900000011", "name": "Бухгалтер на первичку",
+          "area": { "id": "222", "name": "Усть-Каменогорск" },
+          "salary": { "from": null, "to": 60000, "currency": "RUR", "gross": false },
+          "published_at": "2026-09-05T11:00:00+0600",
+          "employer": { "id": "11", "name": "Шығыс Мысал" },
+          "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+          "snippet": { "requirement": "Ввод данных в 1С, работа с документами.", "responsibility": "Документооборот, архив." },
+          "professional_roles": [ { "id": "18", "name": "Бухгалтер" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000011"
+        }
+      ]
+    },
+    "ML engineer": {
+      "found": 1, "pages": 1, "page": 0, "per_page": 100,
+      "items": [
+        {
+          "id": "900000002", "name": "Senior Python Developer / ML",
+          "area": { "id": "159", "name": "Астана" },
+          "salary": { "from": 3000, "to": null, "currency": "USD", "gross": true },
+          "published_at": "2026-10-02T09:00:00+0500",
+          "employer": { "id": "2", "name": "Мысал Дата" },
+          "experience": { "id": "moreThan6", "name": "Более 6 лет" },
+          "snippet": { "requirement": "Machine learning, PyTorch, Kubernetes, AWS.", "responsibility": "Внедрение LLM-решений в продукт." },
+          "professional_roles": [ { "id": "96", "name": "Программист, разработчик" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000002"
+        }
+      ]
+    },
+    "Медсестра": {
+      "found": 1, "pages": 1, "page": 0, "per_page": 100,
+      "items": [
+        {
+          "id": "900000020", "name": "Медицинская сестра процедурного кабинета",
+          "area": { "id": "205", "name": "Шымкент" },
+          "salary": null,
+          "published_at": "2026-09-15T07:45:00+0500",
+          "employer": { "id": "20", "name": "Үлгі Клиника" },
+          "experience": { "id": "noExperience", "name": "Нет опыта" },
+          "snippet": { "requirement": "Сертификат по специальности «Сестринское дело».", "responsibility": "Выполнение инъекций, работа в системе Дамумед." },
+          "professional_roles": [ { "id": "82", "name": "Медицинская сестра, медицинский брат" } ],
+          "alternate_url": "https://hh.kz/vacancy/900000020"
+        }
+      ]
+    }
+  },
+  "details": {
+    "900000001": {
+      "id": "900000001", "name": "Python разработчик (Django)",
+      "experience": { "id": "between1And3", "name": "От 1 года до 3 лет" },
+      "description": "<p>Мы ищем Python-разработчика.</p><ul><li>Python 3, Django, Celery</li><li>PostgreSQL, Redis</li><li>CI/CD в GitLab CI</li></ul>",
+      "key_skills": [ { "name": "Python" }, { "name": "Django Framework" }, { "name": "PostgreSQL" }, { "name": "Git" } ]
+    },
+    "900000002": {
+      "id": "900000002", "name": "Senior Python Developer / ML",
+      "experience": { "id": "moreThan6", "name": "Более 6 лет" },
+      "description": "<p>Разработка моделей машинного обучения, работа с ChatGPT API, Docker.</p>",
+      "key_skills": [ { "name": "Machine Learning" }, { "name": "Python" }, { "name": "Kubernetes" }, { "name": "Английский язык" } ]
+    },
+    "900000010": {
+      "id": "900000010", "name": "Главный бухгалтер",
+      "experience": { "id": "between3And6", "name": "От 3 до 6 лет" },
+      "description": "<p>Ведение учета по МСФО, сдача налоговой отчетности, работа в 1С:Предприятие 8.3.</p>",
+      "key_skills": [ { "name": "1С: Бухгалтерия" }, { "name": "Бухгалтерская отчетность" }, { "name": "MS Excel" } ]
+    }
+  }
+}
