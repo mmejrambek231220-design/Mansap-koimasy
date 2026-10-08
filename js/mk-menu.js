@@ -115,7 +115,7 @@
           ]) + `<a class="mg-more" href="forecast.html#model">Модель қалай жұмыс істейді <span>→</span></a>` },
       ],
       foot: { icon: 'chart', eyebrow: 'Болжам 2030', text: 'Әр дағды мен мамандық үшін модель тоқсан сайын жаңа деректермен қайта үйренеді',
-        link: { text: 'Болжамды ашу', href: 'forecast.html' }, art: 'line' },
+        link: { text: 'Болжамды ашу', href: 'forecast.html' }, art: 'assets/img/menu-team.png' },
     },
     { // Кімге арналған
       tabs: [
@@ -133,7 +133,7 @@
           ]) },
       ],
       foot: { icon: 'apps', eyebrow: 'Қолдану жағдайлары', text: 'Мансап Компасының деректері мен болжамдары кімге және қалай көмектеседі',
-        link: { text: 'Барлығын қарау', href: home('#students') }, art: 'assets/img/menu-team.png' },
+        link: { text: 'Барлығын қарау', href: home('#students') }, art: 'dots' },
     },
     { // Ресурстар
       tabs: [
