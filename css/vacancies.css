@@ -1,0 +1,179 @@
+/* ===== «Вакансиялар» және «Вакансия» беттері (forecast.css компоненттерін толықтырады) ===== */
+
+/* --- Сүзгілер: 4 бағана × 2 қатар, іздеу өрісі --- */
+.vc-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.vc-filters input {
+  width: 100%; font: inherit; font-size: 16px; color: var(--white);
+  background: rgba(255,255,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Ccircle cx='7' cy='7' r='5.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3Cpath d='M11 11l4 4' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 16px center;
+  border: 1px solid rgba(255,255,255,.22); border-radius: 10px; padding: 14px 44px 14px 16px;
+  transition: border-color .2s, background-color .2s;
+}
+.vc-filters input::placeholder { color: #B79FAF; }
+.vc-filters input::-webkit-search-cancel-button { filter: invert(1); cursor: pointer; }
+.vc-filters input:hover, .vc-filters input:focus { border-color: var(--pink-soft); background-color: rgba(255,255,255,.14); outline: none; }
+
+.vc-kpi-skill { font-size: 26px !important; line-height: 1.25; padding-top: 6px; }
+.vc-kpi-skill a:hover { color: #7A2E8E; text-decoration: underline; text-underline-offset: 4px; }
+
+/* --- Дереккөз белгісі --- */
+.vc-src {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 99px;
+  font-size: 12px; font-weight: 700; letter-spacing: .02em; color: var(--white); white-space: nowrap; width: max-content;
+}
+.vc-src::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.85); }
+.vc-src--hh { background: #D6001C; }
+.vc-src--li { background: #0A66C2; }
+.vc-src--en { background: #1E9E5A; }
+
+/* --- Тізім беті: сол жақ панель + негізгі баған --- */
+.vc-layout { margin-top: 40px; display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 24px; align-items: start; scroll-margin-top: 130px; }
+.vc-side { position: sticky; top: 130px; display: grid; gap: 16px; }
+.vc-side .panel-box { padding: 26px; }
+.vc-side .panel-box__head h2 { font-size: 20px; }
+.vc-side .panel-box__head p { font-size: 14px; }
+.vc-note { font-size: 13px; line-height: 1.55; color: var(--muted); background: var(--beige); border-radius: 12px; padding: 14px 16px; }
+
+.vc-skills { margin-top: 18px; display: grid; gap: 4px; }
+.vc-skill {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto 28px; align-items: center; gap: 4px 10px;
+  padding: 8px 10px; border-radius: 10px; transition: background .2s;
+}
+.vc-skill:hover { background: var(--beige); }
+.vc-skill.is-active { background: #F6E9F3; }
+.vc-skill__name { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vc-skill__name:hover { color: #7A2E8E; }
+.vc-skill__name i { font-style: normal; font-family: var(--mono); font-size: 12px; color: #A99; margin-right: 10px; }
+.vc-skill__cnt { font-size: 13px; font-weight: 600; color: var(--muted); }
+.vc-skill__add {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid #E2D9DE; font-size: 14px; line-height: 1;
+  color: var(--plum); transition: background .2s, border-color .2s;
+}
+.vc-skill__add:hover { background: var(--pink-soft); border-color: var(--pink-soft); }
+.vc-skill__bar { grid-column: 1 / -1; height: 4px; background: #F1EEEC; border-radius: 99px; overflow: hidden; }
+.vc-skill__bar span { display: block; height: 100%; background: var(--grad); border-radius: 99px; }
+
+.vc-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; min-height: 40px; }
+.vc-bar__count { font-size: 18px; color: var(--muted); }
+.vc-bar__count b { color: var(--ink); font-size: 22px; letter-spacing: -.01em; }
+.vc-active { display: flex; flex-wrap: wrap; gap: 8px; }
+.vc-chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 99px;
+  background: var(--plum); color: var(--white); font-size: 14px; font-weight: 500; transition: background .2s;
+}
+.vc-chip:hover { background: var(--plum-2); }
+.vc-chip span { font-size: 12px; opacity: .8; }
+.vc-chip--reset { background: none; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; padding-inline: 6px; }
+.vc-chip--reset:hover { background: none; color: #7A2E8E; }
+
+/* Вакансия карточкасы (тізім) */
+.vc-list { margin-top: 16px; display: grid; gap: 12px; }
+.vc-job { flex-direction: row; gap: 28px; padding: 24px 26px; background: var(--white); }
+.vc-job:hover { transform: translateY(-2px); border-color: #E2D3DC; }
+.vc-job__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.vc-job__top { display: flex; align-items: center; gap: 12px; }
+.vc-job h3 { font-size: 21px; letter-spacing: -.015em; line-height: 1.25; }
+.vc-job h3 a:hover { color: #7A2E8E; }
+.vc-job .job__meta { font-size: 14px; }
+.vc-job__co { color: var(--ink); font-weight: 600; }
+.vc-job .job__tags { padding-top: 4px; }
+.job__tags li a { display: block; }
+.job__tags li:has(a) { transition: background .2s; }
+.job__tags li:has(a):hover { background: var(--pink-soft); }
+.vc-job__side { flex: none; width: 230px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 12px; text-align: right; border-left: 1px solid #F0EBE8; padding-left: 24px; }
+.vc-job__sal { font-size: 24px; letter-spacing: -.02em; line-height: 1.1; }
+.vc-job__sal small { display: block; font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: 2px; }
+.vc-ext { font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.vc-ext:hover { color: var(--ink); }
+
+.vc-empty { border: 1px dashed #DDD3D8; border-radius: var(--radius); padding: 48px; text-align: center; display: grid; justify-items: center; gap: 10px; }
+.vc-empty h3 { font-size: 22px; }
+.vc-empty p { color: var(--muted); }
+
+.vc-pager { margin-top: 24px; display: flex; justify-content: center; align-items: center; gap: 6px; }
+.vc-pager button {
+  min-width: 42px; height: 42px; padding: 0 12px; border-radius: 10px; border: 1px solid #ECE7E3;
+  font-weight: 600; font-size: 15px; transition: background .2s, border-color .2s;
+}
+.vc-pager button:hover:not(:disabled) { border-color: var(--plum); }
+.vc-pager button.is-cur { background: var(--plum); border-color: var(--plum); color: var(--white); }
+.vc-pager button:disabled { opacity: .35; cursor: default; }
+.vc-pager span { padding: 0 6px; color: var(--muted); }
+
+.vc-cta { margin-top: 96px; }
+
+/* --- Вакансия беті --- */
+.fc-hero.vc-hero { padding: 64px 0 72px; }
+.vc-hero__top { display: flex; align-items: center; gap: 16px; font-size: 14px; color: #C9B3C1; margin-bottom: 18px; }
+.vc-hero h1 { font-size: clamp(40px, 4.6vw, 64px); max-width: 960px; }
+.vc-hero__meta { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; font-size: 19px; color: #E6D6E0; }
+.vc-hero__meta b { color: var(--white); font-weight: 600; }
+.vc-hero__meta span { color: #8C6E80; }
+.vc-hero__actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+.vc-btn-ghost { border: 1px solid rgba(255,255,255,.3); color: var(--white); }
+.vc-btn-ghost:hover { border-color: var(--pink-soft); background: rgba(255,255,255,.08); }
+
+.vc-detail { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start; }
+.vc-detail__main { display: grid; gap: 20px; min-width: 0; }
+.vc-detail__side { position: sticky; top: 130px; display: grid; gap: 16px; }
+
+.vc-facts { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 1px; background: #ECE7E3; border: 1px solid #ECE7E3; border-radius: var(--radius); overflow: hidden; }
+.vc-facts div { background: var(--white); padding: 22px 24px; }
+.vc-facts span { display: block; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.vc-facts b { display: block; margin-top: 6px; font-size: 20px; letter-spacing: -.01em; }
+.vc-facts div:first-child b { font-size: 28px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.vc-facts small { font-size: 12px; color: var(--muted); }
+
+.vc-desc h2 { font-size: 22px; letter-spacing: -.015em; }
+.vc-desc h2:not(:first-child) { margin-top: 28px; }
+.vc-desc p { margin-top: 10px; color: var(--text); font-size: 16px; line-height: 1.7; }
+.vc-desc ul { margin-top: 12px; display: grid; gap: 8px; }
+.vc-desc li { position: relative; padding-left: 22px; font-size: 16px; line-height: 1.6; color: var(--text); }
+.vc-desc li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: var(--grad); }
+.vc-desc .vc-desc__note { margin-top: 28px; font-size: 13px; color: var(--muted); background: var(--beige); border-radius: 10px; padding: 12px 14px; }
+
+.vc-sks { margin-top: 22px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.vc-sk {
+  display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 12px; background: var(--beige);
+  border: 1px solid transparent; transition: border-color .2s, transform .2s;
+}
+.vc-sk:hover { border-color: var(--violet); transform: translateY(-2px); }
+.vc-sk b { font-size: 17px; line-height: 1.3; }
+.vc-sk__g { font-size: 14px; font-weight: 700; }
+.vc-sk__g.is-up { color: #1E9E5A; }
+.vc-sk__g.is-down { color: #C8283F; }
+.vc-sk__more { margin-top: auto; padding-top: 4px; font-size: 13px; color: var(--muted); }
+.vc-sk:hover .vc-sk__more { color: #7A2E8E; }
+
+.vc-side__txt { margin-top: 10px; font-size: 15px; line-height: 1.5; color: #E6D6E0; }
+.vc-srcs { margin-top: 16px; display: grid; gap: 8px; }
+.vc-srcbtn {
+  display: flex; align-items: center; gap: 10px; padding: 13px 16px; border-radius: 10px;
+  background: var(--plum-2); font-weight: 600; font-size: 15px; transition: background .2s;
+}
+.vc-srcbtn span { margin-left: auto; color: #C9B3C1; }
+.vc-srcbtn:hover { background: #5C2148; }
+.vc-dot { width: 10px; height: 10px; border-radius: 50%; }
+.vc-dot--hh { background: #FF3B50; }
+.vc-dot--li { background: #3D8FE0; }
+.vc-dot--en { background: #2FC173; }
+.vc-side__btn { margin-top: 18px; width: 100%; justify-content: center; }
+
+.vc-cmp { padding: 26px; }
+.vc-cmp__label { color: var(--muted); }
+.vc-cmp__diff { margin-top: 8px; font-size: 38px; font-weight: 700; letter-spacing: -.02em; }
+.vc-cmp__diff.is-up { color: #1E9E5A; }
+.vc-cmp__diff.is-down { color: #C8283F; }
+.vc-cmp__sub { font-size: 14px; color: var(--muted); line-height: 1.45; }
+.vc-cmp__rows { margin-top: 18px; display: grid; gap: 14px; }
+.vc-cmp__rows div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; font-size: 14px; }
+.vc-cmp__rows span { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vc-cmp__rows b { font-size: 15px; }
+.vc-cmp__rows i { grid-column: 1 / -1; height: 10px; background: #F1EEEC; border-radius: 99px; overflow: hidden; }
+.vc-cmp__rows em { display: block; height: 100%; background: var(--grad); border-radius: 99px; }
+.vc-cmp__rows em.is-avg { background: #BFAFB8; }
+
+.vc-back { font-size: 15px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; padding: 4px 6px; }
+.vc-back:hover { color: #7A2E8E; }
+
+.vc-similar { margin-top: 64px; margin-bottom: 96px; }
+.vc-similar .job h4 a:hover { color: #7A2E8E; }

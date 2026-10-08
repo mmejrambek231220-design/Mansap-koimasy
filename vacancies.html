@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="kk" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вакансиялар — Мансап Компасы</title>
+  <meta name="description" content="Машиналық оқыту әдістерімен еңбек нарығындағы кәсіби дағдыларға сұранысты болжайтын платформа.">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/forecast.css">
+  <link rel="stylesheet" href="css/vacancies.css">
+</head>
+<body data-page="list">
+
+<!-- Компас белгісі: бүкіл бетте <use href="#compass"> арқылы қолданылады -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="brandGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#B46AE6"/>
+      <stop offset="1" stop-color="#E8506A"/>
+    </linearGradient>
+    <symbol id="compass" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="19" y="5" width="2" height="4" rx="1" fill="currentColor"/>
+      <rect x="31" y="19" width="4" height="2" rx="1" fill="currentColor"/>
+      <rect x="19" y="31" width="2" height="4" rx="1" fill="currentColor"/>
+      <rect x="5" y="19" width="4" height="2" rx="1" fill="currentColor"/>
+      <g transform="rotate(45 20 20)">
+        <path d="M20 8 L24.5 20 L15.5 20 Z" fill="url(#brandGrad)"/>
+        <path d="M15.5 20 L24.5 20 L20 32 Z" fill="currentColor"/>
+      </g>
+      <circle cx="20" cy="20" r="2.5" fill="#fff" stroke="#2A0D20"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <nav class="nav container-wide" aria-label="Негізгі мәзір">
+    <a class="logo" href="index.html" aria-label="Мансап Компасы — басты бет">
+      <svg class="logo__icon"><use href="#compass"/></svg>
+      <span class="logo__text">Мансап <b>Компасы</b></span>
+    </a>
+
+    <ul class="menu" id="menu">
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Деректер <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="vacancies.html">Вакансиялар</a></li>
+          <li><a href="skills.html">Дағдылар</a></li>
+          <li><a href="professions.html">Мамандықтар</a></li>
+          <li><a href="#">Жалақы</a></li>
+          <li><a href="#">Өңірлер</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Болжамдар <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="forecast.html">Дағдылар болжамы</a></li>
+          <li><a href="professions.html">Мамандық бойынша болжам</a></li>
+          <li><a href="#">Олқылық талдауы</a></li>
+          <li><a href="#">Мансап кеңесшісі</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Кімге арналған <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="index.html#students">Студенттер</a></li>
+          <li><a href="index.html#employers">Жұмыс берушілер</a></li>
+          <li><a href="index.html#universities">Оқу орындары</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Ресурстар <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="index.html#research">Зерттеулер</a></li>
+          <li><a href="#">Әдістеме</a></li>
+          <li><a href="#">Блог</a></li>
+        </ul>
+      </li>
+      <li class="menu__item">
+        <button class="menu__link" aria-haspopup="true">Жоба туралы <span class="chev">⌄</span></button>
+        <ul class="dropdown">
+          <li><a href="#">Біз туралы</a></li>
+          <li><a href="#">Байланыс</a></li>
+        </ul>
+      </li>
+      <li class="menu__mobile-cta"><a class="btn btn--pink" href="#">Дағдымды тексеру <span>→</span></a></li>
+    </ul>
+
+    <div class="nav__right">
+      <a class="nav__signin" href="#">Кіру</a>
+      <a class="btn btn--pink btn--sm" href="#">Дағдымды тексеру <span>→</span></a>
+      <button class="burger" id="burger" aria-label="Мәзірді ашу" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="announce">
+    <span>✦ Жаңа зерттеу: 2030 жылға дейін Қазақстанда сұранысқа ие болатын 20 дағды</span>
+    <a href="index.html#research">Есепті оқу <span>→</span></a>
+  </div>
+</header>
+
+<main>
+  <!-- PAGE HERO -->
+  <section class="fc-hero">
+    <div class="container">
+      <p class="fc-hero__crumbs"><a href="index.html">Басты бет</a> / Деректер</p>
+      <h1><span class="grad-text">Вакансиялар</span></h1>
+      <p class="fc-hero__lead">Болжам моделі үйренетін вакансиялар базасы: мамандық, өңір, сала, жалақы және талап етілетін дағдылар бойынша сүзіп, әр вакансияны толық қараңыз.</p>
+
+      <form class="filters vc-filters" onsubmit="return false" aria-label="Сүзгілер">
+        <label class="vc-filters__q"><span>Іздеу</span>
+          <input id="fText" type="search" placeholder="Лауазым, компания немесе дағды…" autocomplete="off"></label>
+        <label><span>Өңір</span>
+          <select id="fRegion"><option value="-1">Барлық Қазақстан</option></select></label>
+        <label><span>Сала</span>
+          <select id="fSector"><option value="-1">Барлық салалар</option></select></label>
+        <label><span>Мамандық</span>
+          <select id="fTitle"><option value="-1">Барлық мамандықтар</option></select></label>
+        <label><span>Дереккөз</span>
+          <select id="fSrc"><option value="-1">Барлық дереккөздер</option></select></label>
+        <label><span>Тәжірибе</span>
+          <select id="fExp"><option value="-1">Кез келген</option></select></label>
+        <label><span>Кезең</span>
+          <select id="fFrom"></select></label>
+        <label><span>Сұрыптау</span>
+          <select id="fSort">
+            <option value="new">Жаңалары</option>
+            <option value="sal-desc">Жалақы ↓</option>
+            <option value="sal-asc">Жалақы ↑</option>
+          </select></label>
+      </form>
+    </div>
+  </section>
+
+  <!-- KPI -->
+  <section class="kpis container" aria-label="Нәтиже көрсеткіштері">
+    <div class="kpi"><b id="kpiCount">—</b><span>табылған вакансия</span></div>
+    <div class="kpi"><b id="kpiMedian">—</b><span>жалақы медианасы</span></div>
+    <div class="kpi"><b id="kpiSkill" class="vc-kpi-skill">—</b><span>ең көп сұралатын дағды</span></div>
+    <div class="kpi"><b id="kpiCompanies">—</b><span>жұмыс беруші компания</span></div>
+  </section>
+
+  <section class="vc-layout container">
+    <aside class="vc-side">
+      <div class="panel-box">
+        <div class="panel-box__head">
+          <h2>Нәтижелердегі ең көп сұралатын дағдылар</h2>
+          <p>Дағдыны басып, оның болжамын қараңыз. «＋» — осы дағды бойынша сүзу.</p>
+        </div>
+        <ul class="vc-skills" id="topSkills"></ul>
+      </div>
+      <p class="vc-note">ⓘ Демо деректер: вакансиялар hh.kz, LinkedIn, Enbek.kz құрылымына ұқсас синтетикалық жазбалар. Сілтемелер дереккөздегі нақты іздеу нәтижелерін ашады.</p>
+    </aside>
+
+    <div class="vc-main">
+      <div class="vc-bar">
+        <p class="vc-bar__count" id="resultCount" aria-live="polite">—</p>
+        <div class="vc-active" id="activeChips"></div>
+      </div>
+      <div class="vc-list" id="vacList"></div>
+      <nav class="vc-pager" id="pager" aria-label="Беттер"></nav>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta vc-cta">
+    <div class="container">
+      <h2>Дағдылар болжамын қараңыз.</h2>
+      <p>Осы вакансиялар негізінде модель 2030 жылға дейін қай дағдыларға сұраныс өсетінін болжайды.</p>
+      <a class="btn btn--dark" href="forecast.html">Болжамға өту <span>→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="logo" href="index.html">
+          <svg class="logo__icon"><use href="#compass"/></svg>
+          <span class="logo__text">Мансап <b>Компасы</b></span>
+        </a>
+        <p>Еңбек нарығындағы дағдыларға<br>сұранысты болжау платформасы</p>
+      </div>
+      <div class="footer__cols">
+        <div><h5>Деректер</h5><a href="vacancies.html">Вакансиялар</a><a href="skills.html">Дағдылар</a><a href="professions.html">Мамандықтар</a><a href="#">Жалақы</a><a href="#">Өңірлер</a></div>
+        <div><h5>Болжамдар</h5><a href="forecast.html">Дағдылар болжамы</a><a href="#">Олқылық талдауы</a><a href="#">Мансап кеңесшісі</a></div>
+        <div><h5>Кімге</h5><a href="index.html#students">Студенттер</a><a href="index.html#employers">Жұмыс берушілер</a><a href="index.html#universities">Оқу орындары</a></div>
+        <div><h5>Жоба</h5><a href="#">Жоба туралы</a><a href="#">Әдістеме</a><a href="#">Байланыс</a></div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Мансап Компасы. Курстық жұмыс жобасы.</span>
+      <span><a href="#">Құпиялылық саясаты</a><a href="#">Пайдалану шарттары</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="data/dataset.js"></script>
+<script src="js/model.js"></script>
+<script src="js/mk-core.js"></script>
+<script src="js/vacancies.js"></script>
+</body>
+</html>
