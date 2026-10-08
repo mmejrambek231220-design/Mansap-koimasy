@@ -65,6 +65,14 @@
   - Жоба туралы — курстық жұмыс тақырыбы, сандар, байланыс.
 - «жақында» белгісі — әлі жасалмаған беттер (`href="#"`).
 
+### 8. Авторизация — `login.html`, `server/` (SQL Server)
+- `login.html` + `css/auth.css` + `js/auth.js`: Кіру / Тіркелу қойындылары, рөл таңдау (студент / жұмыс беруші / оқу орны), құпиясөз күші, кірген соң профиль карточкасы.
+- `js/mk-auth.js` (барлық бетте): `MKAuth {api, me, logout, ready}`; тақырыптағы «Кіру» орнына аты + «Шығу». API жоқ болса (статикалық сервер), ештеңе өзгермейді.
+- `server/server.js` — Express: статикалық сайт + `/api/auth/{register,login,logout,me}`. `server/`, `collector/`, `.git` сыртқа берілмейді.
+- `server/db.js` — `mssql/msnodesqlv8`, Windows аутентификациясы (ODBC Driver 18). Жергілікті сервер: SQL Server 2025, `localhost`, тек Windows auth.
+- `server/schema.sql` — `dbo.Users`, `dbo.Sessions`; `npm run db:init` дерекқорды жасайды. Құпиясөз — bcrypt, сессия — HttpOnly cookie.
+- Іске қосу: `cd server && npm start` → http://localhost:3000 (`.claude/launch.json` → "mansap-server").
+
 ## Әрі қарай не істеу керек
 1. **Нақты деректер жинау** — dev.hh.ru-да токен алып, `HH_TOKEN` орнатып, `collector` арқылы нақты вакансиялар жинау; LinkedIn үшін Kaggle датасетін жүктеу.
 2. **Collector → сайт** — SQLite базасын тоқсан бойынша агрегаттап, `data/dataset.js` форматына экспорттайтын скрипт жазу (`common/db.py`-ге `export_dataset_js`).
@@ -79,7 +87,9 @@
 - Сүзгілер оң жақтағы шағын панельге көшірілді (чиптер, іздеуі бар тізім).
 - Мәзірге Lightcast стиліндегі үлкен ашылмалы панельдер қосылды, «Кімге арналған» бөліміне 3 сурет.
 - Сайт масштабы 80%-ға кішірейтілді, мәзір панельдері мен жоғарғы батырмалар кішірейді, төменгі жолақтарға суреттер қойылды; графиктерге зум түзетуі.
+- Кіру/тіркелу беті және SQL Server-ге сақтайтын авторизация сервері қосылды.
 
 ## Тексеру
-- Жергілікті сервер: `npx serve .` немесе `.claude/launch.json` → "mansap-kompasy" (port 5173).
+- Жергілікті сервер: `npx serve .` немесе `.claude/launch.json` → "mansap-kompasy" (port 5173, тек статикалық).
+- Авторизациямен: `cd server && npm start` (port 3000). Тексеруден кейін тест пайдаланушыларын `dbo.Users`-тен өшір.
 - Collector тест базасын (`data/check.db`) тексерген соң өшір — `*.db` `.gitignore`-да.

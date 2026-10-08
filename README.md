@@ -10,6 +10,7 @@
 - **Мамандық бойынша болжам** (`professions.html`, `profession.html`) — әр мамандықта болашақта қай дағдылардың маңызы артатыны: «Болашақтың негізгі дағдысы», «Өсіп келе жатқан», «Тұрақты», «Маңызы азаюда».
 - **Дағдылар каталогы** (`skills.html`, `skill.html`) — 47 дағды, әрқайсысының сұраныс тарихы, болжамы, өңірлер мен мамандықтар бойынша бөлінісі.
 - **Вакансиялар** (`vacancies.html`, `vacancy.html`) — сүзгілер, беттеу, hh.kz / LinkedIn / Enbek.kz сайттарына сілтемелер.
+- **Кіру / тіркелу** (`login.html`) — пайдаланушылар SQL Server дерекқорында сақталады (`server/`).
 - **Модель сапасы** — болжам соңғы 4 тоқсанға тексеріледі (backtest), MAPE қарапайым (naive) әдіспен салыстырылады.
 
 ## Болжам моделі
@@ -35,6 +36,7 @@
 ├── tools/                           деректерді дайындау скрипттері (Node.js)
 │   ├── generate-data.js             демо деректер генераторы
 │   └── fetch-hh.js                  hh API-нен нақты вакансиялар жинау
+├── server/                          авторизация сервері (Node.js + SQL Server)
 └── collector/                       деректер жинау модулі (Python)
     ├── hh_collector.py              hh.kz ресми API
     ├── linkedin_collector.py        LinkedIn (Kaggle датасеті / HTML парсер)
@@ -48,6 +50,15 @@
 
 ```bash
 npx serve .
+```
+
+Кіру мүмкіндігімен (SQL Server қажет, толығырақ: [server/README.md](server/README.md)):
+
+```bash
+cd server
+npm install
+npm run db:init
+npm start
 ```
 
 Демо деректерді қайта жасау:
@@ -74,4 +85,4 @@ python run_all.py --hh-mock fixtures/hh_sample.json
 
 ## Технологиялар
 
-HTML, CSS, JavaScript, Chart.js · Python, requests, BeautifulSoup, SQLite
+HTML, CSS, JavaScript, Chart.js · Node.js, Express, SQL Server · Python, requests, BeautifulSoup, SQLite

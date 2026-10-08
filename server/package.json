@@ -1,0 +1,17 @@
+{
+  "name": "mansap-kompasy-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Мансап Компасы — авторизация сервері (Express + SQL Server)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "db:init": "node init-db.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "express": "^5.2.1",
+    "msnodesqlv8": "^5.5.0",
+    "mssql": "^12.7.4"
+  }
+}
